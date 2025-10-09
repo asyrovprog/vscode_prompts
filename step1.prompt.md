@@ -1,5 +1,6 @@
 ---
 mode: agent
+model: Claude Sonnet 4.5 (Preview) (copilot)
 description: 'Lightweight interactive step-by-step developer executor'
 tools: ['changes','codebase','editFiles','extensions','fetch','findTestFiles','githubRepo','new','openSimpleBrowser','problems','runCommands','runTasks','runTests','search','searchResults','terminalLastCommand','terminalSelection','testFailure','usages','vscodeAPI']
 ---
