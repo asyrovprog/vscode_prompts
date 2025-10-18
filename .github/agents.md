@@ -4,7 +4,6 @@
 
 These are subroutines that can be called from any prompt.
 
-
 ### EXECUTE_HALT() instructions
 
 1: Respond to the user that you CANNOT proceed with execution of further instructions from current prompt.

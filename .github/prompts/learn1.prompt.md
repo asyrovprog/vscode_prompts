@@ -10,7 +10,7 @@ tools: ['codebase','search','new','editFiles','runCommands','runTasks','problems
 Learn any software development or AI topic in short iterations: micro-lesson → quiz → mini-lab.  This agent resumes from `learnlog.md` if present; otherwise it creates both the log and a reusable `lab/` project. Material should be presented in top-down style, build intuition, do not rush, basics first.
 
 ## Commands
-- **next** — run the next step only
+- ##### **next** — run the next step only
 - **finish** — autopilot: run remaining steps of this cycle (halts on issues; never writes lab solutions)
 - **explain** — hints / simpler re-teach / (3rd use reveals full solution patch)
 - **abort** — stop now
@@ -67,7 +67,7 @@ On next/finish:
   - A tiny runnable worked example
   - “Common mistakes” box
   - “From prior cycles” section: bullets distilled from last K=3 `learnlog.md` entries that relate to today’s topic, plus short code snippets if `lab/lib/` has relevant utilities  
-Prompt: `next / finish / explain / abort / help`
+  Prompt: `next / finish / explain / abort / help`
 
 ### Step 2 — Quick Quiz (3–5 items)
 - Use Y/N, A–D, or multi-select `M:`
@@ -114,7 +114,7 @@ Prompt: `next / finish / explain / abort / help`
   - Quiz score & missed concepts
   - Lab result, **TODOs remaining**, and key files changed
   - Takeaways & links used  
-Prompt: `next / finish / abort / help`
+  Prompt: `next / finish / abort / help`
 
 ### Step 5 — Next Paths (Deeper)
 Offer 3–5 next iterations from shallow → deep (title ≤6 words + gain + ETA + prereqs).  
