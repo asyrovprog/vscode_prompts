@@ -5,13 +5,15 @@ description: Learning `quiz` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
 
-# Learning `quiz` workflow step function
-
+# Goal
 This function helps the user to evaluate knowledge of provided so far materials on the $TOPIC. 
 
-Instructions:
-- Include prompt: .github/agents.md.
-- Output $TOPIC and available command (see below).
+# Include Instructions From
+- .github/agents.md
+- .github/_learn3/shared.prompt.md
+
+# Instructions
+- Execute DESCRIBE_STEP prompt function
 - Come up with 5-10 quiz questions for the user on the $TOPIC:
     - Use Y/N, A–D, or multi-select `M:`
     - Accept compact answers; score immediately

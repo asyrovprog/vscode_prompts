@@ -4,10 +4,13 @@ description: Learning iteration main entry point
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
 
-# Learning iteration main entry point
+# Goal
+Learning iteration main entry point
 
-Instructions:
-- include prompt: .github/agents.md
+# Include Instructions From
+- .github/agents.md
+
+# Instructions
 - Check if `learnlog.md` is provided, if yes then do EXECUTE_PROMPT for:
     - .github/_learn3/_lab.prompt.md if last recorded checkpoint in the learning log is lab
     - .github/_learn3/_quiz.prompt.md if last recorded checkpoint in the learning log is quiz
