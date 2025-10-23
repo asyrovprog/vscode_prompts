@@ -13,8 +13,8 @@ This function help user the user to choose next learning topic based on `learnlo
 
 # Instructions
 - Execute DESCRIBE_STEP prompt function
-- if `learnlog.md` present, come up with up to 5 suggestions on next related deeper, top-down style  topics based on recorder in `learnlog.md`. Set selected by the user topic to $TOPIC. 
-- Otherwise if $TOPIC 
+- if `learnlog.md` present, come up with 4-5 suggestions for next topic. Use top-down approach to select next topic. Do not rush into advanced topic till basics are solid and mastered with quizzes and labs. Next topic should be continuation, deepening, refinement of already learning material without rush. Set selected by the user topic to $TOPIC. 
+- Otherwise if `learnlog.md` is not present ask user for $TOPIC. 
 - Run EXECUTE_WRITE_LOG() and this learning step completed.
 - Response command handling:
      - `next` - EXECUTE_PROMPT(.github/prompts/ulearn/_learn.prompt.md)

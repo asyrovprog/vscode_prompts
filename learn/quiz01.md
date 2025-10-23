@@ -1,56 +1,45 @@
-# C# TPL Dataflow Library Quiz
+# Quiz 01: C# TPL Dataflow Library
 
-Answer the questions below. Reply with answers in order, e.g.: `1:B 2:Y 3:AC 4:D ...`.
+Answer format:
+- Y/N questions: reply Y or N
+- Single choice: A/B/C/D
+- Multi-select (M): list letters without spaces (e.g., ACD)
 
-Formats:
+1. (Y/N) BufferBlock<T> preserves FIFO ordering of messages.  
+2. (A-D) Primary reason to set BoundedCapacity on a TransformBlock:  
+   A. Increase memory usage  
+   B. Enable backpressure to upstream producers  
+   C. Guarantee ordering  
+   D. Reduce thread pool size  
+3. (Y/N) Setting MaxDegreeOfParallelism > 1 on a TransformBlock may cause outputs to be reordered unless EnsureOrdered=true.  
+4. (A-D) Which block type produces zero or many outputs per single input?  
+   A. TransformBlock  
+   B. TransformManyBlock  
+   C. ActionBlock  
+   D. BufferBlock  
+5. (M) Which of the following propagate completion & faults downstream automatically when PropagateCompletion=true on links?  
+   A. Completion of head block  
+   B. Exceptions thrown inside a block delegate  
+   C. CancellationToken triggering  
+   D. Post() returning false  
+6. (Y/N) Awaiting tailBlock.Completion is sufficient to observe exceptions in the pipeline (if completion was propagated).  
+7. (A-D) Best primitive to branch valid vs invalid messages using a predicate:  
+   A. BroadcastBlock  
+   B. LinkTo with predicate + fallback link  
+   C. ActionBlock with if/else  
+   D. BatchBlock  
+8. (M) Common signs you need BoundedCapacity (choose all):  
+   A. Memory usage steadily growing  
+   B. Producers much faster than consumers  
+   C. Need to guarantee ordering  
+   D. Desire natural backpressure  
+9. (A-D) Alternative more suitable than Dataflow for simple single producer/consumer queue:  
+   A. Channels (System.Threading.Channels)  
+   B. Akka.NET  
+   C. Reactive Extensions  
+   D. Manual Thread + Lock  
+10. (Y/N) ActionBlock<T> implements ISourceBlock<T>.  
 
-- Single choice: A–D
-- Yes/No: Y or N
-- Multi-select: prefix `M:` in question; answer by concatenating letters (e.g. AC)
+Provide your answers in order, e.g.: Y B Y B ABC Y B ABD A N
 
----
-1. Which block type is best for transforming one input item into exactly one output item?  
-   A. ActionBlock  
-   B. TransformBlock  
-   C. BufferBlock  
-   D. BroadcastBlock  
-
-2. Y/N: Setting `BoundedCapacity` helps introduce backpressure to prevent unbounded memory growth.  
-
-3. What option controls the number of items a TransformBlock may process concurrently?  
-   A. EnsureOrdered  
-   B. MaxDegreeOfParallelism  
-   C. BoundedCapacity  
-   D. TaskScheduler  
-
-4. Y/N: `Post()` will asynchronously wait until capacity is available when the block is full.  
-
-5. When you want a block to emit multiple outputs from a single input (fan-out) you should use:  
-   A. BatchBlock  
-   B. BroadcastBlock  
-   C. TransformManyBlock  
-   D. WriteOnceBlock  
-
-6. M: Which of the following contribute directly to controlling throughput & memory usage?  
-   A. BoundedCapacity  
-   B. MaxDegreeOfParallelism  
-   C. EnsureOrdered  
-   D. Completion  
-
-7. Y/N: Using `PropagateCompletion = true` when linking ensures downstream blocks complete (or fault) automatically after upstream completes (or faults).  
-
-8. If a delegate inside a TransformBlock throws an exception and you await its `Completion`, what happens?  
-   A. Completion task faults with the exception  
-   B. Completion task returns normally with default value  
-   C. Block silently swallows the exception  
-   D. Downstream blocks complete successfully regardless  
-
----
-Score rule: Each correct answer = 1 point. 8/8 = 100%, 7/8 = 87.5%, 6/8 = 75%, etc. Need 80% (≥7/8) to proceed without remediation.
-
-Commands after answering:
-- `next` (if >=80%) proceed to lab design.
-- `explain` (if <80%) get targeted recap + retry variant.
-- `prev` go back to learning materials.
-
-## Awaiting your answers
+Commands: prev (return to learn), next (after scoring & logging), explain (after scoring <80%)

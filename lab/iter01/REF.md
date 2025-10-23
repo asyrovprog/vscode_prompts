@@ -1,28 +1,19 @@
-# REF.md – Hints for Lab iter01
+# Reference / Hints
 
-## Hint 1 (TODO N1)
-Use `new TransformBlock<string,string>(async url => { ... }, new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 4, BoundedCapacity = 4, CancellationToken = token });`
+## TODO[N1] NormalizeLine
+Steps: Trim -> lowercase -> collapse multiple whitespace to a single space. Regex like `Regex.Replace(s, "\\s+", " ")` works.
 
-## Hint 2 (TODO N1)
-A simple retry loop:
-```csharp
-for (int attempt = 0; attempt < 3; attempt++) {
-    try { /* fetch */ break; } catch when (attempt < 2) { await Task.Delay(50, token); }
-}
-```
-Throw if still not found.
+## TODO[N2] ShouldSelect
+Conditions: not null/empty, length >= minLength, contains any letter (`s.Any(char.IsLetter)`).
 
-## Hint 3 (TODO N2)
-Use `Regex.Split` with pattern `"[^A-Za-z]+"` then `Where(w => w.Length > 0)`.
+## TODO[N3] Linking & Propagation
+Each `LinkTo` should set `PropagateCompletion = true` so `Complete()` on the head flows to tail.
 
-## Hint 4 (TODO N2)
-Concurrent update:
-```csharp
-counts.AddOrUpdate(word, 1, (_, old) => old + 1);
-```
+## TODO[N4] Bounded Capacity
+Set `BoundedCapacity` on each block (BufferBlock via DataflowBlockOptions; others via ExecutionDataflowBlockOptions). A small number like 2 or 4 makes backpressure observable.
 
-## Hint 5 (TODO N2)
-Ordering: `OrderByDescending(kv => kv.Value).ThenBy(kv => kv.Key).Take(topN)`.
+## Verifying Backpressure (Optional Experiment)
+Introduce an artificial delay in ActionBlock (e.g., `await Task.Delay(200)`) then observe `SendAsync` timing.
 
-## Hint 6 (General)
-Link blocks with `new DataflowLinkOptions { PropagateCompletion = true }` and call `fetchBlock.Complete()` then await `parse.Completion`.
+## Final Count
+You can maintain a local `int count` closed over by the ActionBlock, then expose a Task that awaits `counter.Completion` and returns the count.

@@ -1,78 +1,31 @@
-# Learn Log
+10/22/2025
+- Step: learn
+- Status: started
+- Topic: C# TPL Dataflow Library
+- Summary: Introduced motivation, core block types, composition patterns, backpressure, error handling, common pitfalls, and quick exercise.
 
-## 2025-10-22
-
+10/22/2025
 - Step: learn
 - Status: completed
-- Topic: C# Dataflow Library
-- Summary: Overview of blocks, linking & completion, parallelism options, backpressure with BoundedCapacity, error/fault handling, performance tuning, example pipeline.
+- Topic: C# TPL Dataflow Library
+- Summary: Covered fundamentals (blocks, linking, backpressure, completion, design heuristics) and mini exercise.
 
-## 2025-10-22 (quiz pending)
-
+10/22/2025
 - Step: quiz
 - Status: started
-- Topic: C# Dataflow Library
-- Pending: Awaiting user answers to quiz01
+- Topic: C# TPL Dataflow Library
+- Summary: Awaiting user answers for Quiz 01.
 
-## 2025-10-22 (quiz result)
-
+10/22/2025
 - Step: quiz
 - Status: completed
-- Topic: C# Dataflow Library
-- Result: 75%
-- Incorrect: Q1, Q6
+- Topic: C# TPL Dataflow Library
+- Result: 100%
+- Summary: All answers correct (reinforces mastery of block types, backpressure, completion, branching, alternatives).
 
-## 2025-10-22 (lab started iter02)
-
+10/22/2025
 - Step: lab
 - Status: started
-- Topic: C# Dataflow Library
+- Topic: C# TPL Dataflow Library
 - Lab: lab/iter01
-
-## 2025-10-22 (lab completed)
-
-- Step: lab
-- Status: completed
-- Topic: C# Dataflow Library
-- Lab: lab/iter01
- 
-## 2025-10-22 (topic selected)
-
-- Step: topic
-- Status: completed
-- Topic: Advanced TPL Dataflow Patterns
-
-## 2025-10-22 (learn started)
-
-- Step: learn
-- Status: started
-- Topic: Advanced TPL Dataflow Patterns
-
-## 2025-10-22 (learn completed)
-
-- Step: learn
-- Status: completed
-- Topic: Advanced TPL Dataflow Patterns
-- Summary: Dynamic graph linking, predicate routing, throttling vs bounding, batching, error quarantine, adaptive parallelism, metrics/instrumentation, hybrid Channels/Pipelines, tuning checklist.
-
-## 2025-10-22 (quiz pending)
-
-- Step: quiz
-- Status: started
-- Topic: Advanced TPL Dataflow Patterns
-- Pending: Awaiting user answers
-
-## 2025-10-22 (quiz result)
-
-- Step: quiz
-- Status: completed
-- Topic: Advanced TPL Dataflow Patterns
-- Result: 50%
-- Incorrect: Q3, Q7, Q9, Q10, Q3 format
-
-## 2025-10-22 (lab started)
-
-- Step: lab
-- Status: started
-- Topic: Advanced TPL Dataflow Patterns
-- Lab: lab/iter02
+- Summary: Implement bounded pipeline (normalize -> filter -> count) with backpressure & completion propagation. TODOs N1-N4 pending.

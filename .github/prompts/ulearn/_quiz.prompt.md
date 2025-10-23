@@ -19,6 +19,7 @@ This function helps the user to evaluate knowledge of provided so far materials 
     - If score <80%: offer `explain` recap + targeted retry (fresh variants)  
 - Write copy of quiz into `learn/quizNN.md`, so the user can review later. Write correct answers into `learn/quizNN_answers.md` with reasoning for each answer.
 - Run EXECUTE_WRITE_LOG() and mark quiz completed with quiz results
+- Output `learn/quizNN.md`.
 - Response command handling:
      - `prev` - EXECUTE_PROMPT(.github/prompts/ulearn/_learn.prompt.md)
      - `next` - update checkpoint including quiz questions and answers and then EXECUTE_PROMPT(.github/prompts/ulearn/_lab.prompt.md)

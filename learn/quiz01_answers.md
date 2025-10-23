@@ -1,12 +1,24 @@
-# C# TPL Dataflow Library Quiz Answers & Explanations
+# Quiz 01 Answers & Explanations
 
-1. B – TransformBlock performs one-to-one transformation producing exactly one output per input.
-2. Y – BoundedCapacity limits queued items enforcing natural backpressure.
-3. B – MaxDegreeOfParallelism sets concurrency of the processing delegate.
-4. N – Post() returns false immediately if the block cannot accept; it does NOT wait. `SendAsync` waits.
-5. C – TransformManyBlock allows one-to-many expansion (fan-out).
-6. AB – BoundedCapacity shapes queue size; MaxDegreeOfParallelism shapes concurrent execution. EnsureOrdered controls ordering, not throughput directly; Completion is a lifecycle signal.
-7. Y – PropagateCompletion forwards completion or fault status downstream.
-8. A – The block’s Completion task faults and awaiting it surfaces the exception.
+1. Y  
+FIFO is preserved by BufferBlock.
+2. B  
+BoundedCapacity applies backpressure to avoid unbounded memory.
+3. Y  
+Parallelism can reorder unless EnsureOrdered=true (default true, but turning it off allows reordering).
+4. B  
+TransformManyBlock emits 0..N outputs per input.
+5. ABC  
+Completion, exceptions, and cancellation propagate; Post() returning false does not propagate anything—it's a backpressure signal.
+6. Y  
+Awaiting tail completion surfaces aggregated exceptions.
+7. B  
+LinkTo with predicate and fallback link creates branching without extra buffering.
+8. ABD  
+Ordering (C) is unrelated; A/B/D indicate pressure need.
+9. A  
+Channels are lighter for simple queue patterns.
+10. N  
+ActionBlock is a target only (ITargetBlock<T>), no outputs.
 
-Passing threshold: ≥7 correct (≥80%).
+Scoring: 1 point per question (max 10).

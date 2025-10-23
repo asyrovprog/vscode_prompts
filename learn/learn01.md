@@ -1,193 +1,165 @@
-# C# TPL Dataflow Library – 15‑Minute Top‑Down Guide
+# C# TPL Dataflow Library (20‑Minute Top‑Down Primer)
 
-## 1. Intuition First
+## 1. Why Dataflow?
+Modern apps juggle streams of work: downloading, parsing, transforming, saving. Threading primitives (locks, queues, manual Tasks) get verbose and error‑prone. TPL Dataflow offers Lego‑style building blocks you compose into a pipeline: messages flow through blocks; blocks apply concurrency, ordering, buffering, throttling, backpressure, and fault propagation for you.
 
-Think of Dataflow as Lego blocks for concurrent, asynchronous pipelines inside your process. Each block:
+Think: Functional pipeline + actor mailboxes + async Tasks = Dataflow network.
 
-- Receives messages (inputs)
-- Processes them independently (can be parallel)
-- Emits results to the next block(s)
-
-You compose blocks into a directed graph (usually linear or branched). The library quietly handles queuing, scheduling, throttling, backpressure, and completion propagation, so you focus on transformation logic.
-
-Visual Mental Model:
-
-```text
-            BufferBlock<string>
-                    │
-           TransformBlock<string, Uri>
-                    │
-        TransformBlock<Uri, string>
-            (download HTML)
-                    │
-      ActionBlock<string>(index + store)
+Visual mental model:
+```
+Producer ---> [ BufferBlock ] ---> [ TransformBlock ] ---> [ ActionBlock ] ---> Consumer side-effects
+                 |                      |                     |
+            (Queue)               (Parallel map)         (Execute + completion)
 ```
 
-Messages flow top → bottom. Each block can have an internal degree of parallelism.
+## 2. Core Concepts
+Term              | Meaning | Analogy
+------------------|---------|--------
+Message           | Single data item flowing | Parcel
+Block             | Unit that sends/receives messages | Processing station
+Link              | Connection between output and input | Conveyor belt
+Completion        | Graceful shutdown signal | "No more parcels"
+Backpressure      | Block stops accepting when full | Station says "Hold on"
 
-## 2. Core Concepts (Bird’s Eye)
+Blocks implement at least one interface:
+- `ISourceBlock<TOutput>` (can send).
+- `ITargetBlock<TInput>` (can receive).
+- Most are both through `IPropagatorBlock<TInput,TOutput>`.
 
-| Concept | Purpose | Key Options |
-|---------|---------|-------------|
-| Dataflow Block | Unit of work / queue | ExecutionDataflowBlockOptions |
-| Source / Target | A block can expose `ISourceBlock<TOutput>` and/or `ITargetBlock<TInput>` | Link via `LinkTo` |
-| Link | Connects source to target | `propagateCompletion` flag |
-| Message Passing | Post / SendAsync | Backpressure via bounded capacity |
-| Completion | Signals “no more data” & flush | `Complete()`, `Completion` Task |
-| Faults | Exceptions stored, propagate | `Fault(Exception)` |
+## 3. Essential Block Types (Start Here)
+1. `BufferBlock<T>`: In-memory FIFO queue. Simple inbox.
+2. `TransformBlock<TIn,TOut>`: Async map (can be parallel). Each input produces one output.
+3. `ActionBlock<T>`: Terminal side-effect (store, log, call API). No outputs.
+4. `BroadcastBlock<T>`: Clones latest value to many targets.
+5. `BatchBlock<T>`: Groups items into arrays of a fixed size.
+6. `TransformManyBlock<TIn,TOut>`: FlatMap: each input emits 0..N outputs.
+7. `JoinBlock<T1,T2>` / `BatchedJoinBlock`: Synchronize tuples.
 
-## 3. Main Block Types (Use Cases)
-
-1. BufferBlock&lt;T&gt;
-   - Simple FIFO queue. No processing – just holds items.
-   - Use: decouple producers/consumers.
-2. BroadcastBlock&lt;T&gt;
-   - Clones & broadcasts input to multiple targets.
-3. TransformBlock&lt;TIn,TOut&gt;
-   - Applies a function returning TOut. Supports parallelism.
-4. TransformManyBlock&lt;TIn,TOut&gt;
-   - One-to-many expansion (like SelectMany / flatMap).
-5. ActionBlock&lt;T&gt;
-   - Performs an action (no output) – terminal sink.
-6. BatchBlock&lt;T&gt;
-   - Aggregates inputs into batches of fixed size.
-7. JoinBlock&lt;T1,T2,…&gt;
-   - Waits for one of each input type – tuple output. Use Grouping.
-8. WriteOnceBlock&lt;T&gt;
-   - Captures a single value then repeats it for future consumers.
-9. Custom IPropagatorBlock
-   - Build your own when existing blocks don’t fit.
-
-## 4. Execution Options Cheat Sheet
-
-`ExecutionDataflowBlockOptions` (pass into constructor):
-
-- `MaxDegreeOfParallelism` – concurrency level (default 1, set to `DataflowBlockOptions.Unbounded` for unlimited).
-- `BoundedCapacity` – max queued messages; enforces backpressure (producer waits on `SendAsync`).
-- `EnsureOrdered` – whether outputs preserve input order when parallel.
-- `TaskScheduler` – control where tasks run (e.g., UI thread).
-- `CancellationToken` – cancel pipeline.
-
-## 5. Posting vs Sending
-
-| Method | Returns | Behavior on full | Recommended |
-|--------|---------|------------------|-------------|
-| Post(item) | bool | Drops (false) if cannot accept immediately | Fire-and-forget scenarios |
-| SendAsync(item) | Task&lt;bool&gt; | Awaits space (respects BoundedCapacity) | Robust pipelines (backpressure) |
-
-## 6. Completion Lifecycle
-
-1. Build blocks.
-2. Link them: `source.LinkTo(target, new DataflowLinkOptions { PropagateCompletion = true });`
-3. Feed inputs via Post/SendAsync.
-4. Signal end: call `Complete()` on first block.
-5. Await tail block `await actionBlock.Completion;`
-
-PropagateCompletion = true automatically calls `Complete()` downstream when upstream completes successfully or faults.
-
-## 7. Error Handling & Fault Propagation
-If your delegate throws in a TransformBlock:
-- Block transitions to a faulted state.
-- Downstream blocks (with propagateCompletion) also fault.
-Pattern:
+Minimal pipeline:
 ```csharp
-try { /* work */ }
-catch(Exception ex) { /* log; maybe rethrow */ }
+var buffer = new BufferBlock<string>();
+var toUpper = new TransformBlock<string,string>(s => s.ToUpperInvariant());
+var printer = new ActionBlock<string>(Console.WriteLine);
+buffer.LinkTo(toUpper, new DataflowLinkOptions { PropagateCompletion = true });
+toUpper.LinkTo(printer, new DataflowLinkOptions { PropagateCompletion = true });
+foreach (var word in new[]{"alpha","beta"}) buffer.Post(word);
+buffer.Complete();
+await printer.Completion; // Ensures flush
 ```
-For controlled faults: `((IDataflowBlock)block).Fault(ex);`
-Always inspect `block.Completion` task (await / observe Exception).
 
-## 8. Backpressure & Flow Control
-BoundedCapacity makes producers slow down naturally (`SendAsync` waits). Without it a fast producer can spike memory. Set capacity per stage to tune throughput vs memory.
-Batching + BoundedCapacity + Parallel TransformBlocks are the trifecta for high-throughput ETL-style pipelines.
+## 4. Parallelism & Throughput
+`ExecutionDataflowBlockOptions` controls behavior:
+- `MaxDegreeOfParallelism`: transform concurrency (set >1 for CPU-bound, `DataflowBlockOptions.Unbounded` for full tilt).
+- `BoundedCapacity`: limits queue length creating natural backpressure.
+- `EnsureOrdered`: if false, outputs can arrive out of input order, increasing throughput.
+- `SingleProducerConstrained`: micro-optimization when only one producer.
 
-## 9. Example: Simple Web Scrape Pipeline
+Example parallel transform:
 ```csharp
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
-
-class PipelineDemo
-{
-    public static async Task RunAsync(string[] urls)
-    {
-        var client = new HttpClient();
-
-        var download = new TransformBlock<string, (string url, string html)>(
-            async url => (url, await client.GetStringAsync(url)),
-            new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 4, BoundedCapacity = 8 });
-
-        var extractTitle = new TransformBlock<(string url, string html), (string url, string title)>(
-            page => (page.url, TitleFromHtml(page.html)),
-            new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 4, EnsureOrdered = false });
-
-        var print = new ActionBlock<(string url, string title)>(
-            result => Console.WriteLine($"{result.url} -> {result.title}"));
-
-        download.LinkTo(extractTitle, new DataflowLinkOptions { PropagateCompletion = true });
-        extractTitle.LinkTo(print, new DataflowLinkOptions { PropagateCompletion = true });
-
-        foreach (var u in urls) await download.SendAsync(u);
-        download.Complete();
-        await print.Completion;
-    }
-
-    static string TitleFromHtml(string html)
-    {
-        var start = html.IndexOf("<title>", StringComparison.OrdinalIgnoreCase);
-        if (start < 0) return "(no title)";
-        start += 7;
-        var end = html.IndexOf("</title>", start, StringComparison.OrdinalIgnoreCase);
-        if (end < 0) return "(no title)";
-        return html.Substring(start, end - start).Trim();
-    }
-}
+var options = new ExecutionDataflowBlockOptions
+{ MaxDegreeOfParallelism = Environment.ProcessorCount, BoundedCapacity = 32 };
+var parseJson = new TransformBlock<string,MyDto>(json => JsonSerializer.Deserialize<MyDto>(json)!, options);
 ```
-Key Points:
-- Parallel download & title extraction.
-- Backpressure via BoundedCapacity (8 inflight URL fetches max).
-- Non-ordered title extraction for better throughput.
 
-## 10. When to Use / Avoid
-Use Dataflow When:
-- You have multi-stage transformations.
-- Need in-process streaming, throttling, backpressure.
-- Want to tune parallelism per stage.
-Avoid / Consider Other Tools When:
-- Cross-process distribution (look at messaging systems, gRPC, Azure Service Bus).
-- Very simple one-off asynchronous calls (just use `Task.Run` / `async` directly).
-- High-level reactive UI flows (consider Reactive Extensions).
+## 5. Backpressure & Flow Control
+If target capacity is full, `Post` returns false; switch to `SendAsync` to await space.
+```csharp
+if (!buffer.Post(item)) await buffer.SendAsync(item); // cooperative
+```
+BoundedCapacity + proper awaiting prevents memory balloons.
 
-## 11. Performance Tips
-- Coarse-grained tasks outperform excessively fine-grained ones.
-- Start low on `MaxDegreeOfParallelism`; measure & increase.
-- Use `BoundedCapacity` (memory safety + natural throughput shaping).
-- Consolidate small synchronous operations into a single Transform block to reduce queue hops.
-- Prefer `SendAsync` under pressure.
+## 6. Completion & Error Propagation
+Call `Complete()` on the head block; set `PropagateCompletion = true` in links so completion + exceptions travel downstream.
+Handle faults:
+```csharp
+try { await printer.Completion; }
+catch (AggregateException ex) { /* inspect ex.InnerExceptions */ }
+```
+Inside blocks, throw normally; Dataflow aggregates.
 
-## 12. Testing Pipelines
-Isolate logic (e.g., `TitleFromHtml`) for unit tests; integration-test flow by feeding known messages and awaiting completion. Use cancellation tokens for timeouts.
+## 7. Cancellation
+Provide `CancellationToken` in `ExecutionDataflowBlockOptions`. When canceled, block transitions to faulted (OperationCanceledException).
+```csharp
+var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+var worker = new ActionBlock<int>(async i => { await Task.Delay(1000); Console.WriteLine(i); }, new ExecutionDataflowBlockOptions{ CancellationToken = cts.Token });
+```
 
-## 13. Common Pitfalls & Fixes
-| Pitfall | Symptom | Fix |
-|---------|---------|-----|
-| Forget `Complete()` | Pipeline never ends | Call `Complete()` then await tail block |
-| Unbounded queues | High memory usage | Set `BoundedCapacity` |
-| Swallowing exceptions | Silent failure | Await `Completion` and log `Exception` |
-| Too much parallelism | Diminishing returns / thrash | Profile, dial back degrees |
-| Missing propagateCompletion | Downstream waits forever | Use `PropagateCompletion = true` |
+## 8. Choosing Blocks (Design Heuristics)
+Goal                          | Block(s)
+------------------------------|--------
+Simple buffering              | BufferBlock
+Parallel compute map          | TransformBlock (MaxDegreeOfParallelism)
+One input => many outputs     | TransformManyBlock
+Terminal side-effect          | ActionBlock
+Group N items together        | BatchBlock
+Last value multicast          | BroadcastBlock
+Synchronize two streams       | JoinBlock
 
-## 14. Mini Challenge (Self‑Check)
-Add a `TransformManyBlock<string,string>` after download that emits all hyperlinks from each page before extracting titles of those linked pages. Ensure you don’t reprocess duplicates.
+## 9. Composition Patterns
+1. Linear pipeline (classic ETL).
+2. Tee / broadcast: one source feeding analytics + persistence.
+3. Branch filtering: link with predicate by rejecting messages: `LinkTo(next, msg => IsValid(msg))`; add a trash block for rejects.
+4. Ring / feedback: output re-posted for retries with a cap.
 
-## 15. Quick Recap
-Blocks as composable concurrency units.
-Link with backpressure and completion propagation.
-Tune parallelism & capacity for flow control.
-Await final `Completion` for lifecycle integrity.
+Predicate link example:
+```csharp
+source.LinkTo(validBlock, msg => msg.IsValid);
+source.LinkTo(rejectBlock); // fallback when predicate false
+```
 
-## 16. Next Step Suggestion
-Take the mini challenge or proceed to a quiz to reinforce concepts.
+## 10. Monitoring & Diagnostics
+- Use `OutputCount` (BufferBlock) and `InputCount` (Propagators) for rough backlog.
+- Wrap delegates to time operations.
+- Consider ETW / EventSource for production tracing.
 
-Happy flowing! 🚀
+Simple instrumentation wrapper:
+```csharp
+var timed = new TransformBlock<string,string>(async s => {
+    var sw = Stopwatch.StartNew();
+    var result = await ProcessAsync(s);
+    Console.WriteLine($"Processed {s} in {sw.ElapsedMilliseconds} ms");
+    return result;
+});
+```
+
+## 11. Common Pitfalls
+Pitfall                        | Avoidance
+-------------------------------|----------
+Infinite queue growth          | Set BoundedCapacity; await SendAsync.
+Never completing pipeline      | Always call head.Complete() & await tail.Completion.
+Blocking synchronous code      | Use async delegates; avoid `.Result` or `.Wait()`.
+Silent exception swallow       | Await `Completion`; inspect AggregateException.
+Incorrect ordering assumption  | Remember unordered when EnsureOrdered=false.
+
+## 12. When NOT to Use Dataflow
+- Ultra-low latency single message (overhead > benefit).
+- Simple single-producer/consumer with a channel (use `System.Threading.Channels`).
+- Cross-process / remote actor model (use queue + service bus).
+
+## 13. Interop & Alternatives
+Compare quickly:
+- `System.Threading.Channels`: lightweight; manual linking.
+- Reactive Extensions (Rx): push-based, LINQ for streams, no built-in backpressure of same style.
+- Akka.NET: actor supervision, distributed scenarios.
+Dataflow sits sweet spot: in-process parallel pipelines with backpressure.
+
+## 14. Mini Exercise (Try Now)
+Build a pipeline:
+- Input: file paths.
+- Transform: read file + count lines.
+- Batch: group counts in batches of 5.
+- Action: print batch sum.
+Extend: Add a retry branch for IO exceptions using feedback loop.
+
+## 15. Summary (You Now Know)
+- How to assemble Buffer/Transform/Action blocks.
+- Control throughput with MaxDegreeOfParallelism + BoundedCapacity.
+- Propagate completion & errors.
+- Design selection heuristics + patterns.
+- Avoid common pitfalls & compare alternatives.
+
+Next: Quiz will solidify concepts and edge cases.
+
+---
+Commands: prev (back to topic selection), next (finish learn & go to quiz)
+---

@@ -17,8 +17,8 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 - Verify if all labs are marked in `learnlog.md` as finished and if there is any unfinished ask the user to complete it.
 - Otherwise:
     - Come up with 2-3 high level ideas for lab and ask user to choose.
-    - Create lab by running EXECUTE_IMPLEMENT_LAB() instructions. If EXECUTE_IMPLEMENT_LAB returns FAILURE, this means it was too complex or poorly designed. Reject it and propose different high level ideas.
-- Run EXECUTE_WRITE_LOG() to create lab log record, so learning can be resumed from this step and $TOPIC, mark lab started.
+    - Execute instructions in IMPLEMENT_LAB(). If it returns FAILURE, this means it was too complex or poorly designed. Come up with different ideas which more likely to work.
+- Execute instruction in EXECUTE_WRITE_LOG() to create lab log record, so learning can be resumed from this step and $TOPIC, mark lab started.
 - Response command handling:
      - `prev` - EXECUTE_PROMPT(.github/prompts/ulearn/_quiz.prompt.md)
      - `check` - execute tests to verify completion of the tab and output success or failure result.
@@ -26,9 +26,11 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
      - `explain` - ask the user where help is needed and provide hints on the lab tasks
 
 
-# EXECUTE_IMPLEMENT_LAB instructions
+# IMPLEMENT_LAB() 
 
-- Create an assignment in `lab/iterNN/`. Prefer assignment to be a single command line project which outputs success or failure for each test. Assignment should require about ~15 minutes to complete and should be focused on the $TOPIC.
+## Instructions
+
+- Create an assignment in `lab/iterNN/`. Assignment should be a single command line project which outputs success or failure for each test. Assignment should require not more than ~30 minutes ( including reading instructions) to complete and should be very focused on the $TOPIC. Each `[YOUR CODE GOES HERE]` should require not more than 60 lines of code. Complete assignment should not require more than 100 lines of code. Instructions should be clear and take into account that this is still new subject for learner. Minimize need to code unrelated to the topic functionality (if we topic is C# events, asking to parse json is unrelated.) 
 - Create README.md in the folder with requirements to complete lab assignment. 
 - Create `REF.md` with detailed hints tied to each TODO.
     - Scaffolding Rules:
