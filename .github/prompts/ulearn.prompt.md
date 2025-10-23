@@ -1,5 +1,6 @@
 ---
 mode: agent
+model: GPT-5 (copilot)
 description: Learning iteration main entry point
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
@@ -7,13 +8,10 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 # Goal
 Learning iteration main entry point
 
-# Include Instructions From
-- .github/agents.md
-
 # Instructions
 - Check if `learnlog.md` is provided, if yes then do EXECUTE_PROMPT for:
-    - .github/_learn3/_lab.prompt.md if last recorded checkpoint in the learning log is lab
-    - .github/_learn3/_quiz.prompt.md if last recorded checkpoint in the learning log is quiz
-    - .github/_learn3/_learn.prompt.md if last recorded checkpoint in the learning log is learn
-    - .github/_learn3/_topic.prompt.md otherwise
-- If no checkpoint then EXECUTE_PROMPT(.github/_learn3/_topic.prompt.md)
+    - .github/prompts/ulearn/_lab.prompt.md if last recorded uncompleted checkpoint in the learning log is lab
+    - .github/prompts/ulearn/_quiz.prompt.md if last recorded uncompleted checkpoint in the learning log is quiz
+    - .github/prompts/ulearn/_learn.prompt.md if last recorded uncompleted checkpoint in the learning log is learn
+    - .github/prompts/ulearn/_topic.prompt.md with latest learning topic from `learnlog.md`
+- If no `learnlog.md` then ask the user to provide topic ($TOPIC) to learn and EXECUTE_PROMPT(.github/prompts/ulearn/_learn.prompt.md)
