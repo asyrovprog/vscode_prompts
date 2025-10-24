@@ -4,15 +4,19 @@ model: GPT-5 (copilot)
 description: Learning `topic` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- Conforms to LPP_SPEC v1.0.1 (.github/prompts/LPP_SPEC.md) -->
+<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
 
 # Goal
 Provide reusable prompt functions for workflow steps. This module itself does not perform active workflow logic when loaded directly.
 
 # Prompt Functions
 
-## DESCRIBE_STEP instructions
+## DESCRIBE_STEP()
 
+### Goal
+Describe the current workflow step context and available commands to the user.
+
+### Instructions
 - Output line separator, such as multiple `-` characters
 - Output goal of this current workflow step
 - Output line separator, such as multiple `-` characters
@@ -22,21 +26,33 @@ Provide reusable prompt functions for workflow steps. This module itself does no
 - Output line separator, such as multiple `-` characters
 
 
-## EXECUTE_HALT() instructions
+## EXECUTE_HALT()
 
+### Goal
+Stop execution intentionally and await further user input before continuing workflow logic.
+
+### Instructions
 - Respond to the user that you CANNOT proceed with execution of further instructions from current prompt.
 - Stop execution of current prompt and wait for the user response.
 
-## EXECUTE_PROMPT($PROMPT) instructions
+## EXECUTE_PROMPT($PROMPT)
 
+### Goal
+Load another prompt module and execute its instructions verbatim.
+
+### Instructions
 - Output that you will follow every instruction verbatim from the $PROMPT file. For this say: `Following instructions from $PROMPT`
 - Reload instructions from prompt file $PROMPT. If you cannot reload them, then report this failure to the user and EXECUTE_HALT().
 - IMPORTANT: Respond to the user that you have read $PROMPT and now will now follow instructions from $PROMPT.
 - Execute instructions from prompt $PROMPT.
 
 
-## EXECUTE_WRITE_LOG(...) instructions
+## EXECUTE_WRITE_LOG(...)
 
+### Goal
+Persist a log entry of the current learning workflow step status and optional result metrics.
+
+### Instructions
 - if `learnlog.md` does not exist, create it
 - Record current step name and it's status. Status can be `started` or `completed`. Step name could be `learn`, `quiz`, `lab`, `topic`
 - Add $TOPIC

@@ -4,7 +4,7 @@ model: GPT-5 (copilot)
 description: Learning iteration main entry point
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- Conforms to LPP_SPEC v1.0.1 (.github/prompts/LPP_SPEC.md) -->
+<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
 
 # Goal
 Learning iteration main entry point
@@ -26,3 +26,4 @@ Learning iteration main entry point
         - last recorder checkpoint is topic
     - $DIR/_topic.prompt.md otherwise
 - If no `learnlog.md` then ask the user to provide topic ($TOPIC) to learn and EXECUTE_PROMPT($DIR/_learn.prompt.md)
+    - Return HALT if $TOPIC not provided by user after request.

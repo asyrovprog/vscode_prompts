@@ -4,7 +4,7 @@ description: Learning `lab` workflow step function
 model: GPT-5 (copilot)
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- Conforms to LPP_SPEC v1.0.1 (.github/prompts/LPP_SPEC.md) -->
+<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
 
 # Goal
 - This function helps the user to learn provided $TOPIC through leetcode style programming assignment (lab)
@@ -13,14 +13,14 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 - $DIR/_shared.prompt.md
 
 # Instructions
-- Execute DESCRIBE_STEP prompt function
-- If $DIR is not set then HALT (dispatcher must define base directory)
-- Ensure `lab/` exists; if not then what language should be used (C# or Python).
-- Verify if all labs are marked in `learnlog.md` as finished and if there is any unfinished ask the user to complete it.
+- Execute DESCRIBE_STEP()
+- If $DIR is not set then Return HALT (dispatcher must define base directory)
+- Ensure `lab/` exists; if not then ask user what language should be used (C# or Python) then create directory.
+- Verify if any labs are marked unfinished in `learnlog.md`; if so ask user to complete those first and Return HALT.
 - Otherwise:
-    - Come up with 2-3 high level ideas for lab and ask user to choose.
-    - Execute instructions in IMPLEMENT_LAB(). If it returns FAILURE, this means it was too complex or poorly designed. Come up with different ideas which more likely to work.
-- Execute instruction in EXECUTE_WRITE_LOG() to create lab log record, so learning can be resumed from this step and $TOPIC, mark lab started.
+    - Propose 2-3 high level lab concept options and ask user to choose.
+    - Execute IMPLEMENT_LAB(); if it returns FAILURE (too complex or poorly designed) propose alternative concepts and retry once; on second FAILURE Return FAILURE.
+- Execute EXECUTE_WRITE_LOG(...) to create lab log record with $TOPIC and mark lab started.
 
 # Command Mapping
 - prev - go back to quiz module ($DIR/_quiz.prompt.md)
