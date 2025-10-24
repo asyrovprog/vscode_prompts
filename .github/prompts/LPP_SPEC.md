@@ -1,4 +1,4 @@
-# Literal Prompt Programming (LPP) Specification v1.0.1
+# Literal Prompt Programming (LPP) Specification v1.0.2
 
 Status: Stable
 Last-Updated: 2025-10-23
@@ -78,6 +78,12 @@ Each listed function SHOULD include:
 Optionally: params, returns, side-effects.
 Actual invocation logic lives in shared modules or in instructions.
 
+Optional Subsection Conventions (non-normative but recommended for clarity):
+- `### Goal` – plain-language intent of the function (no procedural steps).
+- `### Constraints` – bounded resource/time/LOC limits or invariants relevant to implementation; descriptive only.
+- `### Instructions` – ordered or bulleted implementation guidance internal to the function definition.
+Tooling MAY ignore these headings; their presence MUST NOT be required for validity.
+
 ## 7. Instructions Section
 
 Header: `# Instructions` (exactly one per module).
@@ -113,6 +119,7 @@ Attributes (recommended):
 - failureModes: named scenarios for returning FAILURE
 - preconditions: list of conditions required before execution
 - postconditions: guaranteed truths after SUCCESS
+- constraints (optional): textual limits (time budgets, max LOC) or guardrails; purely descriptive and MAY appear under a `### Constraints` heading in the module.
 
 Invocation protocol (recommended pattern):
 1. (Optional) announce intent
@@ -249,6 +256,10 @@ NL               ::= '\n'
 ## 17. Change Management
 
 Increment version when any normative rule changes. Modules reference this spec via `specRef`.
+
+Version History:
+- v1.0.2: Added optional `### Constraints` subsection convention and `constraints` attribute to Prompt Function contract (non-normative enhancement).
+- v1.0.1: Initial stable release.
 
 ---
 End of LPP Specification.

@@ -10,7 +10,7 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 This function helps the user to evaluate knowledge of provided so far materials on the $TOPIC. 
 
 # Include Instructions From
-- .github/prompts/ulearn/_shared.prompt.md
+- $DIR/_shared.prompt.md
 
 # Instructions
 - If $DIR is not set then HALT (dispatcher must define base directory)

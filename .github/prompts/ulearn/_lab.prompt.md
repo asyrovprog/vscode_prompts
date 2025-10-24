@@ -10,7 +10,7 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 - This function helps the user to learn provided $TOPIC through leetcode style programming assignment (lab)
 
 # Referenced Instructions
-- .github/prompts/ulearn/_shared.prompt.md
+- $DIR/_shared.prompt.md
 
 # Instructions
 - Execute DESCRIBE_STEP prompt function
@@ -22,46 +22,73 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
     - Execute instructions in IMPLEMENT_LAB(). If it returns FAILURE, this means it was too complex or poorly designed. Come up with different ideas which more likely to work.
 - Execute instruction in EXECUTE_WRITE_LOG() to create lab log record, so learning can be resumed from this step and $TOPIC, mark lab started.
 
-# Prompt Functions
-- DESCRIBE_STEP() : emit standardized step header
-- EXECUTE_WRITE_LOG() : append lab step state
-- IMPLEMENT_LAB() : generate, validate, scaffold lab assignment (may return FAILURE requiring redesign)
-
 # Command Mapping
 - prev - go back to quiz module ($DIR/_quiz.prompt.md)
 - check - run lab tests and report success/failure
 - next - mark lab completed then go to topic selection ($DIR/_topic.prompt.md)
 - explain - ask for where help is needed and provide hints tied to TODOs
 
+# Prompt Functions
 
-# IMPLEMENT_LAB() 
+## IMPLEMENT_LAB()
 
-## Instructions
+### Goal
+- Design a solvable lab for $TOPIC; privately implement and pass all tests, then publish a stubbed version whose tests fail and guide the learner via TODO IDs.
 
-- Create an assignment in `lab/iterNN/`. Assignment should be a single command line project which outputs success or failure for each test. Assignment should require not more than ~30 minutes ( including reading instructions) to complete and should be very focused on the $TOPIC. Each `[YOUR CODE GOES HERE]` should require not more than 60 lines of code. Complete assignment should not require more than 100 lines of code. Instructions should be clear and take into account that this is still new subject for learner. Minimize need to code unrelated to the topic functionality (if we topic is C# events, asking to parse json is unrelated.) 
-- Create README.md in the folder with requirements to complete lab assignment. 
-- Create `REF.md` with detailed hints tied to each TODO.
-    - Scaffolding Rules:
-        - Provide **≥2 TODOs** and at least one **[YOUR CODE GOES HERE]** region.
-        - Ship **failing tests first** (red → green). Fail messages must reference TODO IDs and point to README.md sections.
-        - **Never** auto-complete TODOs.
-        - Include clear method signatures and parameter documentation in stubs so learner intent is obvious.
-        - Language specifics:
-            - For C# create `lab/iterNN/Task.cs` with markers like:
-                ```csharp
-                // TODO[N1]: implement stable hashing using X algorithm  
-                /// <param name="input">The string to hash</param>
-                /// <returns>A stable hash code for the input</returns>
-                public static string StableId(string input)  
-                {  
-                    // [YOUR CODE GOES HERE]  
-                    throw new NotImplementedException("TODO[N1]");  
-                }
-                ```
-            - Python: create `lab/iterNN/task.py` with functions and `# TODO[N1]` markers; include doctests or `assert` checks that fail initially.
-- **Implement yourself** the entire lab yourself without stubs. Write full working code that satisfies all test cases.
-- **Run implemented program** and observe all tests succeeded 
-- If you cannot implement yourself and verify all tests complete with success within 3 attempts then remove `lab/iterNN` and return FAILURE
-- Otherwise:
-    - Replace your working code with `[YOUR CODE GOES HERE]` stubs for the learner.
-    - Return SUCCESS
+### Constraints
+- Learner effort ≤ ~30 minutes (reading + coding).
+- Learner-added code ≤ 100 LOC total; any single TODO body ≤ 60 LOC.
+- Provide ≥2 TODOs (N1, N2; optional N3) with at least one non-trivial function.
+- Public shipped code must contain stubs with `[YOUR CODE GOES HERE]` and NotImplemented exceptions (or raises in Python).
+- Tests (public form) must FAIL and mention both TODO ID and corresponding README section title.
+- Scope must remain strictly on $TOPIC (avoid unrelated parsing/I/O/etc.).
+- Private working solution must appear only inside a collapsed section in `REF.md`; never remain in task file when shipped.
+- "Never auto-complete TODOs" applies only after private verification (public form); private completion is required.
+- Up to 3 private attempts to achieve all PASSing tests; otherwise delete iteration folder and return FAILURE.
+- Tests should be deterministic (seed any randomness).
+
+### Instructions
+- Concept Design:
+    - Generate 2–3 concise concept options tied directly to $TOPIC.
+    - Select the simplest viable concept that exercises core ideas.
+- Plan TODOs:
+    - Define IDs N1, N2 (optional N3) each with a short title and learning objective.
+- Scaffold:
+    - Create `lab/iterNN/` (increment NN).
+    - Add `README.md` with a section per TODO (title format: "TODO N1 – <title>").
+    - Add task file (`Task.cs` for C# or `task.py` for Python) containing stub blocks:
+        ```csharp
+        // TODO[N1]: <objective>
+        // [YOUR CODE GOES HERE]
+        throw new NotImplementedException("TODO[N1]");
+        ```
+        ```python
+        # TODO[N1]: <objective>
+        # [YOUR CODE GOES HERE]
+        raise NotImplementedError("TODO[N1]")
+        ```
+    - Add test harness (`Program.cs` or `run.py`) printing PASS/FAIL per test.
+    - Add `REF.md` with hint sections per TODO (no solution yet).
+    - Add tests/asserts that will FAIL while stubs are present.
+- Private Implementation (green phase):
+    - Fill each TODO body with a working solution.
+    - Run tests until all PASS (≤3 attempts). An attempt = modify solution + full test run.
+    - If still failing after 3 attempts: delete `lab/iterNN/` and RETURN FAILURE.
+- Public Conversion (red phase):
+    - Revert solution bodies back to stubs (`[YOUR CODE GOES HERE]` + NotImplemented/raise).
+    - Ensure tests now FAIL with messages like: "TODO[N1] not satisfied – see README section 'TODO N1 – <title>'".
+    - Do not relax test coverage/assertions.
+- Reference Solution Storage:
+    - Append collapsed solution block in `REF.md` below hints:
+        ```
+        <details><summary>Reference Solution (open after completion)</summary>
+        // or python full passing code
+        </details>
+        ```
+- Validation:
+    - Verify required files exist: `README.md`, `REF.md`, task file, harness.
+    - Public test run: failures contain both TODO ID and matching README section title.
+    - Stubs contain `[YOUR CODE GOES HERE]` markers and correct NotImplemented throws/raises.
+    - If any validation fails RETURN FAILURE.
+- Outcome:
+    - RETURN SUCCESS on validated stubbed public lab; else FAILURE.

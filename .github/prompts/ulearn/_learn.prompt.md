@@ -11,7 +11,7 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 This function helps the user to learn provided $TOPIC. Your task is to come up with top-down learning materials for this $TOPIC which could be learned within ~20 minutes. Use top-down approach, look into `learnlog.md` to come up with best set of materials. Material should be fun to learn, include intuitions, visualizations and examples. Do not rush into advanced topics till basics are solid.
 
 # Include Instructions From
-- .github/prompts/ulearn/_shared.prompt.md
+- $DIR/_shared.prompt.md
 
 # Instructions
 - If $DIR is not set then HALT()

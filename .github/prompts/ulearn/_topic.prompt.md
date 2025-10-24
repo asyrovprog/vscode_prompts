@@ -10,7 +10,7 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 This function help user the user to choose next learning topic based on `learnlog.md`.
 
 # Include Instructions From
-- .github/prompts/ulearn/_shared.prompt.md
+- $DIR/_shared.prompt.md
 
 # Instructions
 - Execute DESCRIBE_STEP prompt function
