@@ -4,8 +4,12 @@ model: GPT-5 (copilot)
 description: Learning `topic` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
+<!-- Conforms to LPP_SPEC v1.0.1 (.github/prompts/LPP_SPEC.md) -->
 
-# Common Prompt Functions
+# Goal
+Provide reusable prompt functions for workflow steps. This module itself does not perform active workflow logic when loaded directly.
+
+# Prompt Functions
 
 ## DESCRIBE_STEP instructions
 
@@ -51,3 +55,4 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 - Status: completed
 - Lab: lab/iter01
 ```
+<!-- Library Module: no top-level Instructions per LPP spec v1.0.1 -->

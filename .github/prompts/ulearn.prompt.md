@@ -4,20 +4,25 @@ model: GPT-5 (copilot)
 description: Learning iteration main entry point
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
+<!-- Conforms to LPP_SPEC v1.0.1 (.github/prompts/LPP_SPEC.md) -->
 
 # Goal
 Learning iteration main entry point
 
+# Include Instructions From
+- .github/prompts/ulearn/_shared.prompt.md
+
 # Instructions
+- Set $DIR = .github/prompts/ulearn  // Base directory for ulearn step prompt modules
 - Check if `learnlog.md` is provided, if yes then do EXECUTE_PROMPT for:
-    - .github/prompts/ulearn/_lab.prompt.md if:
+    - $DIR/_lab.prompt.md if:
         - last recorded checkpoint is lab and this lab is not completed
         - last checkpoint is quiz and this quiz is completed
-    - .github/prompts/ulearn/_quiz.prompt.md if:
+    - $DIR/_quiz.prompt.md if:
         - last recorder checkpoint is learn and it is completed
         - last recorder checkpoint is quiz and it is not completed
-    - .github/prompts/ulearn/_learn.prompt.md if:
+    - $DIR/_learn.prompt.md if:
         - last recorded checkpoint is learn and it is not completed
         - last recorder checkpoint is topic
-    - .github/prompts/ulearn/_topic.prompt.md otherwise
-- If no `learnlog.md` then ask the user to provide topic ($TOPIC) to learn and EXECUTE_PROMPT(.github/prompts/ulearn/_learn.prompt.md)
+    - $DIR/_topic.prompt.md otherwise
+- If no `learnlog.md` then ask the user to provide topic ($TOPIC) to learn and EXECUTE_PROMPT($DIR/_learn.prompt.md)

@@ -4,6 +4,7 @@ description: Learning `lab` workflow step function
 model: GPT-5 (copilot)
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
+<!-- Conforms to LPP_SPEC v1.0.1 (.github/prompts/LPP_SPEC.md) -->
 
 # Goal
 - This function helps the user to learn provided $TOPIC through leetcode style programming assignment (lab)
@@ -13,17 +14,24 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 
 # Instructions
 - Execute DESCRIBE_STEP prompt function
+- If $DIR is not set then HALT (dispatcher must define base directory)
 - Ensure `lab/` exists; if not then what language should be used (C# or Python).
 - Verify if all labs are marked in `learnlog.md` as finished and if there is any unfinished ask the user to complete it.
 - Otherwise:
     - Come up with 2-3 high level ideas for lab and ask user to choose.
     - Execute instructions in IMPLEMENT_LAB(). If it returns FAILURE, this means it was too complex or poorly designed. Come up with different ideas which more likely to work.
 - Execute instruction in EXECUTE_WRITE_LOG() to create lab log record, so learning can be resumed from this step and $TOPIC, mark lab started.
-- Response command handling:
-     - `prev` - EXECUTE_PROMPT(.github/prompts/ulearn/_quiz.prompt.md)
-     - `check` - execute tests to verify completion of the tab and output success or failure result.
-     - `next` - Run EXECUTE_WRITE_LOG() and mark lab completed, and then EXECUTE_PROMPT(.github/prompts/ulearn/_topic.prompt.md)
-     - `explain` - ask the user where help is needed and provide hints on the lab tasks
+
+# Prompt Functions
+- DESCRIBE_STEP() : emit standardized step header
+- EXECUTE_WRITE_LOG() : append lab step state
+- IMPLEMENT_LAB() : generate, validate, scaffold lab assignment (may return FAILURE requiring redesign)
+
+# Command Mapping
+- prev - go back to quiz module ($DIR/_quiz.prompt.md)
+- check - run lab tests and report success/failure
+- next - mark lab completed then go to topic selection ($DIR/_topic.prompt.md)
+- explain - ask for where help is needed and provide hints tied to TODOs
 
 
 # IMPLEMENT_LAB() 
@@ -39,7 +47,7 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
         - **Never** auto-complete TODOs.
         - Include clear method signatures and parameter documentation in stubs so learner intent is obvious.
         - Language specifics:
-            - C#: create `lab/iterNN/Task.cs` with markers like:
+            - For C# create `lab/iterNN/Task.cs` with markers like:
                 ```csharp
                 // TODO[N1]: implement stable hashing using X algorithm  
                 /// <param name="input">The string to hash</param>
