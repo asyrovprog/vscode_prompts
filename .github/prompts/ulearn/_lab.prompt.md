@@ -24,7 +24,7 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 
 # Command Mapping
 - prev - go back to quiz module ($DIR/_quiz.prompt.md)
-- check - run lab tests and report success/failure
+- check - run lab tests and report success/failure. DO NOT fix code if tests fail
 - next - mark lab completed then go to topic selection ($DIR/_topic.prompt.md)
 - explain - ask for where help is needed and provide hints tied to TODOs
 

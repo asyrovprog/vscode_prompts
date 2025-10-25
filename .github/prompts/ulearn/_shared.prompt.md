@@ -41,9 +41,8 @@ Stop execution intentionally and await further user input before continuing work
 Load another prompt module and execute its instructions verbatim.
 
 ### Instructions
-- Output that you will follow every instruction verbatim from the $PROMPT file. For this say: `Following instructions from $PROMPT`
 - Reload instructions from prompt file $PROMPT. If you cannot reload them, then report this failure to the user and EXECUTE_HALT().
-- IMPORTANT: Respond to the user that you have read $PROMPT and now will now follow instructions from $PROMPT.
+- Output to chat that you will now follow every instruction verbatim from the $PROMPT file. For this say: `Following instructions from $PROMPT`
 - Execute instructions from prompt $PROMPT.
 
 

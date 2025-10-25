@@ -26,17 +26,20 @@ There are two module types:
 2. Library Module: provides only prompt function definitions; has no top-level execution.
 
 ### 2.1 Runnable Module Required Order (normative):
+
 1. Front-Matter block
 2. `# Goal`
 3. `# Instructions`
 
 Optional sections:
+
 - Imports (`# Include Instructions From` or `# Referenced Instructions`)
 - Prompt Functions (`# Prompt Functions`)
 - Command Mapping (`# Command Mapping` or “Response command handling”)
 - Kernel Spec (`# LPP Kernel Spec`)
 
 ### 2.2 Library Module Required Order (normative):
+
 1. Front-Matter block
 2. `# Goal`
 3. `# Prompt Functions`
@@ -48,10 +51,12 @@ Library Modules MUST NOT include an `# Instructions` section. If present, it SHO
 Delimited by `---` ... `---` at file head.
 
 Required keys:
+
 - mode
 - model
 
 Optional keys:
+
 - tools
 - description
 - specRef (path or URL pointing to this spec, e.g. `.github/prompts/LPP_SPEC.md`)
@@ -72,13 +77,16 @@ All paths MUST exist. Imports are declarative; execution only happens via explic
 ## 6. Prompt Functions Section
 
 Header: `# Prompt Functions`
+
 Each listed function SHOULD include:
+
 - Name
 - Brief description
 Optionally: params, returns, side-effects.
 Actual invocation logic lives in shared modules or in instructions.
 
 Optional Subsection Conventions (non-normative but recommended for clarity):
+
 - `### Goal` – plain-language intent of the function (no procedural steps).
 - `### Constraints` – bounded resource/time/LOC limits or invariants relevant to implementation; descriptive only.
 - `### Instructions` – ordered or bulleted implementation guidance internal to the function definition.
@@ -101,6 +109,7 @@ No duplicate command tokens.
 
 Header: `# LPP Kernel Spec`
 May formalize:
+
 - variables: name, required, mutability (read|write)
 - promptFunctions: name, params, returns, sideEffects, failureModes
 - outcomes: enumerated semantics
@@ -112,6 +121,7 @@ This section is authoritative when present; tooling SHOULD validate actual usage
 ## 10. Prompt Function Contract
 
 Attributes (recommended):
+
 - name (ALL_CAPS)
 - params: ordered list of `$PARAM` names
 - returns: one or more allowed outcome codes
@@ -122,6 +132,7 @@ Attributes (recommended):
 - constraints (optional): textual limits (time budgets, max LOC) or guardrails; purely descriptive and MAY appear under a `### Constraints` heading in the module.
 
 Invocation protocol (recommended pattern):
+
 1. (Optional) announce intent
 2. validate preconditions
 3. execute steps
@@ -258,6 +269,7 @@ NL               ::= '\n'
 Increment version when any normative rule changes. Modules reference this spec via `specRef`.
 
 Version History:
+
 - v1.0.2: Added optional `### Constraints` subsection convention and `constraints` attribute to Prompt Function contract (non-normative enhancement).
 - v1.0.1: Initial stable release.
 

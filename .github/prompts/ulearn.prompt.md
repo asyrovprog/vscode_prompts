@@ -1,6 +1,5 @@
 ---
 mode: agent
-model: GPT-5 (copilot)
 description: Learning iteration main entry point
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
