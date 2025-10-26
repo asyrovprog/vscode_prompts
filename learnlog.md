@@ -42,7 +42,35 @@
 
 10/24/2025
 - Step: lab
-- Status: started
+- Status: completed
 - Topic: BatchBlock & Grouping Data in TPL Dataflow
 - Lab: lab/iter02
-- Summary: Build a log aggregator pipeline using BatchBlock with time-based batching (50 entries OR 5 seconds), Timer integration, TriggerBatch() usage, and statistics tracking.
+- Result: Tests passing (dotnet run)
+- Summary: Completed log aggregator pipeline using BatchBlock with time-based batching (50 entries OR 5 seconds), Timer integration, TriggerBatch() usage, and statistics tracking.
+
+10/24/2025
+- Step: topic
+- Status: completed
+- Topic: Error Handling & Block Faults in TPL Dataflow
+- Summary: Selected foundational topic covering exception handling in dataflow blocks, fault propagation mechanisms, recovery strategies, and graceful degradation patterns.
+
+10/24/2025
+- Step: learn
+- Status: completed
+- Topic: Error Handling & Block Faults in TPL Dataflow
+- Summary: Covered block fault states, fault propagation with PropagateCompletion, three error handling strategies (try-catch, predicate filtering, pipeline-level monitoring), AggregateException handling, cancellation vs faults, and best practices for resilient pipelines. Materials saved to learn/learn03.md.
+
+10/24/2025
+- Step: quiz
+- Status: completed
+- Result: 100%
+- Topic: Error Handling & Block Faults in TPL Dataflow
+- Summary: Perfect score on error handling quiz covering block completion states, fault propagation, AggregateException, item-level vs pipeline-level error handling strategies, predicate routing, fault isolation, and cancellation vs faults. Questions in learn/quiz03.md; answers in learn/quiz03_answers.md.
+
+10/24/2025
+- Step: lab
+- Status: completed
+- Topic: Error Handling & Block Faults in TPL Dataflow
+- Lab: lab/iter03
+- Result: Tests passing (dotnet run)
+- Summary: Completed resilient data import pipeline processing CSV with validation, predicate-based routing for valid/invalid records, descriptive error messages, and statistics reporting. Successfully implemented item-level error recovery without pipeline faults.
