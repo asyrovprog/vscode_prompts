@@ -2,9 +2,9 @@
 mode: agent
 description: Learning iteration main entry point
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
-model: GPT-5 (copilot)
 ---
-<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
+
+> Must read .github/prompts/LPP_SPEC.md
 
 # Goal
 Learning iteration main entry point
