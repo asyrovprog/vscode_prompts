@@ -1,8 +1,26 @@
-# Literal Prompt Programming (LPP) Specification v1.0.2
+# Literal Prompt Programming (LPP) Specification (Draft)
 
-Status: Stable
-Last-Updated: 2025-10-23
+Status: Draft
+Last-Updated: 2025-10-26
 Scope: Defines universal structure and semantics for LPP prompt modules. Domain-agnostic.
+
+<!-- LPP_SPEC_ID: LPP_STABLE -->
+<!-- LPP_MODEL_DIGEST_START -->
+CoreEntities:
+	PromptModule: frontMatter + Goal + (optional) Prompt Functions + (optional) Instructions (if runnable) + optional Command Mapping + optional Kernel Spec
+	PromptFunction: reusable named block (UPPER_SNAKE, optional ()) with params as $VARS
+	Variable: $NAME placeholder; validate before critical use
+	Command: user token mapped to action
+Returns:
+	Functions MAY return: outcome status strings, arbitrary text, structured objects, numbers, arrays, or other functions (higher-order) unless constrained by Kernel Spec.
+OutcomeStatuses:
+	Baseline: SUCCESS, FAILURE
+	Custom statuses MAY be defined (author-chosen strings) but are entirely optional. They are advisory labels unless the Kernel Spec assigns formal semantics.
+RulesMinimal:
+	- Exactly one '# Instructions' section in runnable modules
+	- Goal is non-procedural
+	- Custom statuses are advisory unless Kernel Spec declares semantics
+<!-- LPP_MODEL_DIGEST_END -->
 
 ## 1. Core Concepts
 
@@ -10,13 +28,13 @@ Prompt Module: Single text file containing: front-matter metadata, goal, optiona
 
 Runnable Prompt: The `# Instructions` section (exactly one). Executes sequentially, invokes Prompt Functions, handles commands.
 
-Prompt Function: Named reusable instruction block (ALL_CAPS optional `()` suffix), MAY accept parameters (referenced as `$NAME`), returns an outcome code.
+Prompt Function: Named reusable instruction block (ALL_CAPS optional `()` suffix), MAY accept parameters (referenced as `$NAME`), and MAY return any value type: status string, plain text, number, object, array, or even another function. If returning a status string used for control-flow, its meaning SHOULD be documented (Kernel Spec if formal).
 
 Variable: Dynamic placeholder marked with `$` prefix (`$VAR`). Session-scoped unless explicitly persisted.
 
 Command: User token mapped to an action (branch, function invocation, transition).
 
-Outcome Codes: Minimal set: SUCCESS | FAILURE | HALT | RETRY (RETRY optional).
+Outcome Statuses: Recommended baseline: SUCCESS (normal completion), FAILURE (did not achieve intended result). Authors MAY introduce additional status strings, but functions are free to return ANY value (text, number, object, array, function) and are NOT expected to use special keywords like HALT or RETRY unless they find them helpful and explicitly define them.
 
 ## 2. Module Types and Mandatory Sections
 
@@ -95,8 +113,7 @@ Tooling MAY ignore these headings; their presence MUST NOT be required for valid
 ## 7. Instructions Section
 
 Header: `# Instructions` (exactly one per module).
-Contains ordered imperative statements. Each step SHOULD begin with a verb (Execute, Load, Validate, Ask, Set, Return).
-Conditionals MUST be explicit (“If X then … else …”).
+Contains ordered imperative or control-flow statements. Steps MAY begin with a verb (Execute, Load, Validate, Ask, Set, Return) for clarity, but any single clear instruction is valid. Conditionals MUST be explicit (“If X then … else …”).
 
 ## 8. Command Mapping
 
@@ -124,11 +141,11 @@ Attributes (recommended):
 
 - name (ALL_CAPS)
 - params: ordered list of `$PARAM` names
-- returns: one or more allowed outcome codes
+- returns: ANY value (status string, text, number, object, array, function). If control-flow depends on particular status strings, list only those you actually use (e.g., SUCCESS, FAILURE) and define semantics in Kernel Spec or inline notes. Avoid implying mandatory special codes.
 - sideEffects: explicit list (e.g., write:stdout, read:file, create:dir)
-- failureModes: named scenarios for returning FAILURE
+- failureModes: named scenarios for returning FAILURE (or other error-like statuses if defined)
 - preconditions: list of conditions required before execution
-- postconditions: guaranteed truths after SUCCESS
+- postconditions: guaranteed truths after SUCCESS (or success-like custom status)
 - constraints (optional): textual limits (time budgets, max LOC) or guardrails; purely descriptive and MAY appear under a `### Constraints` heading in the module.
 
 Invocation protocol (recommended pattern):
@@ -136,8 +153,8 @@ Invocation protocol (recommended pattern):
 1. (Optional) announce intent
 2. validate preconditions
 3. execute steps
-4. emit postconditions (on SUCCESS)
-5. return outcome code
+4. emit postconditions (on SUCCESS or success-like custom status)
+5. return value (status or arbitrary data)
 
 ## 11. Variables
 
@@ -145,133 +162,5 @@ Syntax: `$IDENTIFIER`
 MUST be validated before critical use if derived from uncertain sources (user input, external files).
 SHOULD avoid silent mutation—any mutation is an explicit instruction step.
 
-## 12. Outcome Codes
-
-| Code    | Semantics |
-|---------|-----------|
-| SUCCESS | Operation completed normally |
-| FAILURE | Recoverable issue; caller chooses alternate path or retry |
-| HALT    | Execution intentionally suspended awaiting external input |
-| RETRY   | Caller SHOULD immediately re-invoke with adjusted parameters |
-
-No other codes unless extended in Kernel Spec.
-
-## 13. Validation Rules (Abstract)
-
-| Rule ID | Description |
-|---------|-------------|
-| V01     | Missing front-matter |
-| V02     | Missing `# Goal` |
-| V03     | Multiple `# Instructions` sections |
-| V04     | Command referenced but not mapped |
-| V05     | Duplicate command token |
-| V06     | Imported file not found |
-| V07     | Prompt Function invoked but undeclared (when Kernel Spec present) |
-| V08     | Unknown outcome code |
-| V09     | Variable used before any assignment/validation (optional warning) |
-| V10     | Undeclared side-effect (if Kernel Spec present) |
-
-## 14. EBNF Grammar
-
-```
-PromptModule     ::= RunnableModule | LibraryModule
-RunnableModule   ::= FrontMatter GoalSection ImportSection? PFSection? InstructionSection CommandMapSection? KernelSpecSection?
-LibraryModule    ::= FrontMatter GoalSection ImportSection? PFSection KernelSpecSection?
-FrontMatter      ::= '---' MetaLine+ '---'
-MetaLine         ::= Key ':' Value
-GoalSection      ::= '# Goal' NL GoalLine+
-ImportSection    ::= ('# Include Instructions From' | '# Referenced Instructions') NL ImportLine+
-ImportLine       ::= '-' Path
-PFSection        ::= '# Prompt Functions' NL PFLine+
-PFLine           ::= '-' FunctionName (':' Description)?
-InstructionSection ::= '# Instructions' NL InstLine+
-InstLine         ::= '-'? VerbPhrase
-CommandMapSection ::= ('# Command Mapping' | 'Response command handling') NL CmdLine+
-CmdLine          ::= '-' CommandToken '-' ActionPhrase
-KernelSpecSection ::= '# LPP Kernel Spec' NL SpecLine+
-Key              ::= /[A-Za-z_][A-Za-z0-9_-]*/
-Value            ::= /.*/
-FunctionName     ::= /[A-Z0-9_]+(\(\))?/
-CommandToken     ::= /[a-z0-9_-]+/
-VerbPhrase       ::= /.*/
-ActionPhrase     ::= /.*/
-Path             ::= /.+\.prompt\.md$/
-Description      ::= /.*/
-SpecLine         ::= /.*/
-NL               ::= '\n'
-```
-
-## 15. JSON Schema Skeleton
-
-```json
-{
-  "type": "object",
-  "required": ["frontMatter", "goal"],
-  "properties": {
-    "frontMatter": {
-      "type": "object",
-      "required": ["mode", "model"],
-      "properties": {
-        "mode": { "type": "string" },
-        "model": { "type": "string" },
-        "tools": { "type": "array", "items": { "type": "string" } },
-        "description": { "type": "string" },
-        "specRef": { "type": "string" }
-      }
-    },
-    "goal": { "type": "string" },
-    "imports": { "type": "array", "items": { "type": "string" } },
-    "promptFunctions": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["name"],
-        "properties": {
-          "name": { "type": "string" },
-          "params": { "type": "array", "items": { "type": "string" } },
-          "returns": { "type": "array", "items": { "type": "string", "enum": ["SUCCESS","FAILURE","HALT","RETRY"] } }
-        }
-      }
-    },
-  "instructions": { "type": "array", "items": { "type": "string" }, "description": "Present only for runnable modules" },
-    "commands": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["name","action"],
-        "properties": {
-          "name": { "type": "string" },
-          "action": { "type": "string" }
-        }
-      }
-    },
-    "kernelSpec": { "type": "object" }
-  }
-}
-```
-
-## 16. Authoring Checklist
-
-| Item | Must Be True |
-|------|--------------|
-| Front-matter present & closed | Yes |
-| `mode`, `model` set | Yes |
-| Goal concise & non-procedural | Yes |
-| Exactly one Instructions section | Yes |
-| Every invoked command mapped | Yes (if commands exist) |
-| Imports resolve | Yes (if imports exist) |
-| Functions used declared (if spec present) | Yes |
-| Only allowed outcome codes used | Yes |
-| No duplicate command tokens | Yes |
-
-## 17. Change Management
-
-Increment version when any normative rule changes. Modules reference this spec via `specRef`.
-
-Version History:
-
-- v1.0.2: Added optional `### Constraints` subsection convention and `constraints` attribute to Prompt Function contract (non-normative enhancement).
-- v1.0.1: Initial stable release.
-
 ---
-End of LPP Specification.
+End of LPP Specification (Draft). Future formal appendices may introduce: validation rule catalog, machine-readable schema, grammar, authoring checklist, and versioning policy once patterns stabilize.

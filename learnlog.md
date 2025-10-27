@@ -86,3 +86,26 @@
 - Status: started
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Summary: Learning how to create reusable dataflow components by encapsulating pipelines, building custom blocks with Encapsulate method, and applying composition patterns for maintainable dataflow architectures.
+10/26/2025
+- Step: learn
+- Status: completed
+- Topic: Custom Blocks & Encapsulation in TPL Dataflow
+- Summary: Added comprehensive materials with diagrams, heuristics, patterns (filter-transform, validate-route, throttle, fork-join), checklist, and exercise.
+
+10/26/2025
+- Step: quiz
+- Status: completed
+- Result: 60%
+- Topic: Custom Blocks & Encapsulation in TPL Dataflow
+- Summary: Quiz04 covering encapsulation purpose, exposed interfaces, completion prerequisites, use cases vs custom implementation, logging location, fault propagation, checklist items, and abstraction benefits. Questions in learn/quiz04.md; answers in learn/quiz04_answers.md.
+10/26/2025
+- Step: quiz-retry
+- Status: completed
+- Result: 33%
+- Topic: Custom Blocks & Encapsulation in TPL Dataflow
+- Summary: First retry attempt; incorrect on interface exposure, checklist completeness, checklist purpose rationale, and fix strategy question. Needs reinforcement on exposed interfaces (target/source pairing), reasons to encapsulate (adding D & E), full checklist (include configuration params), and lifecycle vs ordering guarantees.
+10/26/2025
+- Step: lab
+- Status: started
+- Topic: Custom Blocks & Encapsulation in TPL Dataflow
+- Lab: lab/iter04

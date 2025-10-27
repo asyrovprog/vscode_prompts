@@ -4,7 +4,7 @@ model: GPT-5 (copilot)
 description: Learning `topic` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
+<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
 
 # Goal
 Provide reusable prompt functions for workflow steps. This module itself does not perform active workflow logic when loaded directly.
@@ -70,4 +70,4 @@ Persist a log entry of the current learning workflow step status and optional re
 - Status: completed
 - Lab: lab/iter01
 ```
-<!-- Library Module: no top-level Instructions per LPP spec v1.0.1 -->
+<!-- Library Module: no top-level Instructions (per LPP spec) -->

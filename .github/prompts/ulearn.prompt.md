@@ -2,8 +2,9 @@
 mode: agent
 description: Learning iteration main entry point
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
+model: GPT-5 (copilot)
 ---
-<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
+<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
 
 # Goal
 Learning iteration main entry point
@@ -25,4 +26,4 @@ Learning iteration main entry point
         - last recorder checkpoint is topic
     - $DIR/_topic.prompt.md otherwise
 - If no `learnlog.md` then ask the user to provide topic ($TOPIC) to learn and EXECUTE_PROMPT($DIR/_learn.prompt.md)
-    - Return HALT if $TOPIC not provided by user after request.
+    - Execute EXECUTE_HALT() if $TOPIC not provided by user after request.

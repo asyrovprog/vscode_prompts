@@ -1,5 +1,33 @@
 # Custom Blocks & Encapsulation in TPL Dataflow
 
+## Top-Down Overview (Mental Map First)
+
+Think of a complex dataflow pipeline like a small factory floor: raw items enter, move across specialized stations (validate, enrich, transform, aggregate), and finished products exit. Early on, you wire every station manually. As patterns repeat, you decide to build a single self-contained "machine" that performs a multi-step process internally but exposes only two sockets: IN and OUT. That machine is a custom (encapsulated) block.
+
+Encapsulation gives you these superpowers:
+- Collapse many moving parts into a single mental unit (lowers cognitive load)
+- Compose higher-level architectures: pipelines of business concepts instead of plumbing pieces
+- Swap internal implementation without changing the external contract (interface stability)
+- Test multi-step behavior in isolation (simpler automated tests)
+
+Core principle: A good custom block feels indistinguishable from a built-in block in usage: SendAsync in, link out, Complete(), await Completion.
+
+Visual (Outside vs Inside) – Mermaid:
+
+```mermaid
+flowchart LR
+    subgraph EncapsulatedBlock[EvenSquareBlock]
+        T[(Target)] --> S[(Source)]
+    end
+    T --> F[Filter even]
+    F --> Q[Square]
+    Q --> S
+```
+
+You only see the external shell (target/source); internal mini-graph stays hidden.
+
+Transition heuristic: When you explain a pipeline with "first we..., then we..., then we..." more than twice in code reviews—consider encapsulating.
+
 ## Introduction: Why Custom Blocks?
 
 As your dataflow pipelines grow, you'll find yourself repeating patterns:
@@ -310,3 +338,99 @@ Custom blocks via encapsulation let you:
 The `DataflowBlock.Encapsulate()` method is your Swiss Army knife—learn it well, and you'll build elegant, maintainable dataflow systems.
 
 **Next steps**: Try creating a custom block for a pattern you've used multiple times in your labs. Common patterns: parse-validate-transform, filter-batch-process, retry-on-failure wrappers.
+
+---
+## Mental Model Visualization (Mermaid Only)
+
+Outside: One propagator. Inside: Directed acyclic mini-network.
+
+### Mermaid Diagrams
+
+Below are equivalent Mermaid representations you can view in GitHub or VS Code (Markdown preview supports Mermaid).
+
+```mermaid
+flowchart LR
+    subgraph Public[Encapsulated Block]
+        T[Target] --> S[Source]
+    end
+    T --> F[Filter even]
+    F --> Q[Square]
+    Q --> S
+```
+
+```mermaid
+flowchart LR
+    V[Validate Input] -->|valid| X[Transform]
+    V -->|invalid| E[Log Error]
+    X --> O[(Downstream Output)]
+    E:::error
+    classDef error fill:#ffdddd,stroke:#ff5555,color:#b30000;
+```
+
+Fork-Join Example:
+
+```mermaid
+flowchart LR
+    B[Broadcast]
+    B --> P1[Path1: *2]
+    B --> P2[Path2: *3]
+    P1 --> J[Batch Join]
+    P2 --> J[Batch Join]
+    J --> C[Combine string.Join]
+```
+
+Throttle Block Internals:
+
+```mermaid
+flowchart LR
+    IN[Target] --> BUF[Buffer]
+    BUF --> THR[Transform delay]
+    THR --> OUT[Source]
+```
+
+Pipeline Builder Concept:
+
+```mermaid
+flowchart LR
+    A[Input] --> S1[Step 1]
+    S1 --> S2[Step 2]
+    S2 --> S3[Step 3]
+    S3 --> Z[Output]
+```
+
+---
+## Design Heuristics Cheat Sheet
+
+| Symptom | Encapsulate? | Rationale |
+|---------|--------------|-----------|
+| Copy-pasted block wiring 3+ times | Yes | DRY & maintainability |
+| Multi-step business concept (e.g., "sanitize-calculate-summarize") | Yes | Single conceptual unit |
+| Single TransformBlock only | No | Adds needless indirection |
+| Pipeline needs runtime swapping (strategy pattern) | Yes | Replace internals behind stable shell |
+| Blocks require coordinated completion/error handling | Yes | Encapsulation centralizes lifecycle |
+
+---
+## Quick API Cheat Sheet
+
+```csharp
+var encapsulated = DataflowBlock.Encapsulate(innerTargetBlock, innerSourceBlock);
+// outer target methods: SendAsync, Post, Complete
+// outer source methods: LinkTo, TryReceive, Completion
+```
+
+Checklist before returning:
+1. All internal links use PropagateCompletion = true
+2. No internal blocks leaked (no return of concrete inner types)
+3. Exceptions either allowed to fault or handled consistently
+4. Optional configuration surfaces (timeouts, degrees, capacities) exposed via parameters
+5. Unit test posts inputs, completes, asserts outputs & completion state
+
+---
+## Micro Exercise (Try Now ~2 min)
+
+Implement a custom block "RetryTransformBlock" wrapping a TransformBlock with simple retry (N attempts) on transient exceptions. Bonus: Parameterize delay/backoff.
+
+---
+## One-Liner Summary
+
+Encapsulation converts recurring internal block graphs into clean reusable primitives, raising the abstraction level of your dataflow architecture.

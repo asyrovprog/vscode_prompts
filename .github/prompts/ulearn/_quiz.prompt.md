@@ -4,7 +4,7 @@ model: GPT-5 (copilot)
 description: Learning `quiz` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
+<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
 
 # Goal
 This function helps the user to evaluate knowledge of provided so far materials on the $TOPIC. 
@@ -13,7 +13,7 @@ This function helps the user to evaluate knowledge of provided so far materials 
 - $DIR/_shared.prompt.md
 
 # Instructions
-- If $DIR is not set then Return HALT (dispatcher must define base directory)
+- If $DIR is not set then Execute EXECUTE_HALT() (dispatcher must define base directory)
 - Execute DESCRIBE_STEP()
 - Generate 5-10 quiz questions for $TOPIC:
     - Use Y/N, A–D, or multi-select `M:` formats

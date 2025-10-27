@@ -4,7 +4,7 @@ model: GPT-5 (copilot)
 description: Learning `topic` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
+<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
 
 # Goal
 This function help user the user to choose next learning topic based on `learnlog.md`.
@@ -14,7 +14,7 @@ This function help user the user to choose next learning topic based on `learnlo
 
 # Instructions
 - Execute DESCRIBE_STEP()
-- If $DIR is not set then Return HALT (dispatcher must define base directory)
+- If $DIR is not set then Execute EXECUTE_HALT() (dispatcher must define base directory)
 - If `learnlog.md` present then propose 4-5 candidate next topics derived from progression of prior steps (avoid jumping ahead); ask user to choose and set $TOPIC.
 - Otherwise ask user to provide initial $TOPIC.
 - Execute EXECUTE_WRITE_LOG(...) and mark topic selection completed.

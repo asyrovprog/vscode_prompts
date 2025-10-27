@@ -4,7 +4,7 @@ description: Learning `lab` workflow step function
 model: GPT-5 (copilot)
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
+<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
 
 # Goal
 - This function helps the user to learn provided $TOPIC through leetcode style programming assignment (lab)
@@ -14,9 +14,9 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 
 # Instructions
 - Execute DESCRIBE_STEP()
-- If $DIR is not set then Return HALT (dispatcher must define base directory)
+- If $DIR is not set then Execute EXECUTE_HALT() (dispatcher must define base directory)
 - Ensure `lab/` exists; if not then ask user what language should be used (C# or Python) then create directory.
-- Verify if any labs are marked unfinished in `learnlog.md`; if so ask user to complete those first and Return HALT.
+- Verify if any labs are marked unfinished in `learnlog.md`; if so ask user to complete those first and Execute EXECUTE_HALT().
 - Otherwise:
     - Propose 2-3 high level lab concept options and ask user to choose.
     - Execute IMPLEMENT_LAB(); if it returns FAILURE (too complex or poorly designed) propose alternative concepts and retry once; on second FAILURE Return FAILURE.
@@ -70,7 +70,7 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
     - Add test harness (`Program.cs` or `run.py`) printing PASS/FAIL per test.
     - Add `REF.md` with hint sections per TODO (no solution yet).
     - Add tests/asserts that will FAIL while stubs are present.
-- Private Implementation (green phase):
+- MUST NOT SKIP: Private Implementation (green phase):
     - Fill each TODO body with a working solution.
     - Run tests until all PASS (≤3 attempts). An attempt = modify solution + full test run.
     - If still failing after 3 attempts: delete `lab/iterNN/` and RETURN FAILURE.

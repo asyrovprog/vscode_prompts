@@ -4,7 +4,7 @@ model: GPT-5 (copilot)
 description: Learning `learn` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- Conforms to LPP_SPEC v1.0.2 (.github/prompts/LPP_SPEC.md) -->
+<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
 
 # Goal
 
@@ -14,7 +14,7 @@ This function helps the user to learn provided $TOPIC. Your task is to come up w
 - $DIR/_shared.prompt.md
 
 # Instructions
-- If $DIR is not set then Return HALT
+- If $DIR is not set then Execute EXECUTE_HALT()
 - Execute DESCRIBE_STEP()
 - Provide learning materials for the $TOPIC, and write copy of this learning materials into `learn/learnNN.md`, so the user can review later.
 - Execute EXECUTE_WRITE_LOG(...) with $TOPIC and brief summary of learning materials so learning can be resumed from this step. Mark this step as started.
