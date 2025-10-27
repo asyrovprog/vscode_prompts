@@ -74,3 +74,15 @@
 - Lab: lab/iter03
 - Result: Tests passing (dotnet run)
 - Summary: Completed resilient data import pipeline processing CSV with validation, predicate-based routing for valid/invalid records, descriptive error messages, and statistics reporting. Successfully implemented item-level error recovery without pipeline faults.
+
+10/26/2025
+- Step: topic
+- Status: completed
+- Topic: Custom Blocks & Encapsulation in TPL Dataflow
+- Summary: Selected foundational topic covering creation of custom dataflow blocks, encapsulating pipelines as reusable components, block composition patterns, and building higher-level abstractions.
+
+10/26/2025
+- Step: learn
+- Status: started
+- Topic: Custom Blocks & Encapsulation in TPL Dataflow
+- Summary: Learning how to create reusable dataflow components by encapsulating pipelines, building custom blocks with Encapsulate method, and applying composition patterns for maintainable dataflow architectures.
