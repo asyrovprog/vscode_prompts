@@ -109,3 +109,23 @@
 - Status: started
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Lab: lab/iter04
+
+10/27/2025
+- Step: lab
+- Status: completed
+- Topic: Custom Blocks & Encapsulation in TPL Dataflow
+- Lab: lab/iter04
+- Result: Tests passing (dotnet run)
+- Summary: Completed dual-path fork/join custom block implementing internal pipeline assembly with TransformBlock for upper/lower case processing, Encapsulate method to expose unified IPropagatorBlock interface, and optional diagnostics tracking processed items.
+
+10/27/2025
+- Step: topic
+- Status: completed
+- Topic: JoinBlock & Coordinated Data Flows
+- Summary: Selected foundational topic covering synchronization of multiple data streams, greedy vs non-greedy joining modes, coordination of parallel data sources, and building complex multi-input workflows.
+
+10/27/2025
+- Step: learn
+- Status: started
+- Topic: JoinBlock & Coordinated Data Flows
+- Summary: Learning how to synchronize multiple independent data streams using JoinBlock, understand multi-input target interfaces, greedy vs non-greedy modes, ordering guarantees, common patterns (ID-entity lookup, multi-source aggregation, synchronized fan-in), completion and fault propagation. Materials saved to learn/learn05.md.

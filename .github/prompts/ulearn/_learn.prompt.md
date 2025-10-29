@@ -8,7 +8,7 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 
 # Goal
 
-This function helps the user to learn provided $TOPIC. Your task is to come up with top-down learning materials for this $TOPIC which could be learned within ~20 minutes. Use top-down approach, look into `learnlog.md` to come up with best set of materials. Material should be fun to learn, include intuitions, visualizations and examples. Do not rush into advanced topics till basics are solid.
+This function helps the user to learn provided $TOPIC. Your task is to come up with top-down learning materials for this $TOPIC which could be learned within ~20 minutes. Use top-down approach, look into `learnlog.md` to come up with best set of materials. Material should be fun to learn, include intuitions, visualizations, examples and mermaid diagrams. Do not rush into advanced topics till fundamentals and basics are solid (i.e. master of basics approach).
 
 # Include Instructions From
 - $DIR/_shared.prompt.md
