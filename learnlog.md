@@ -124,8 +124,23 @@
 - Topic: JoinBlock & Coordinated Data Flows
 - Summary: Selected foundational topic covering synchronization of multiple data streams, greedy vs non-greedy joining modes, coordination of parallel data sources, and building complex multi-input workflows.
 
-10/27/2025
+10/29/2025
 - Step: learn
-- Status: started
+- Status: completed
 - Topic: JoinBlock & Coordinated Data Flows
-- Summary: Learning how to synchronize multiple independent data streams using JoinBlock, understand multi-input target interfaces, greedy vs non-greedy modes, ordering guarantees, common patterns (ID-entity lookup, multi-source aggregation, synchronized fan-in), completion and fault propagation. Materials saved to learn/learn05.md.
+- Summary: Completed comprehensive learning materials covering JoinBlock fundamentals including multi-input target interfaces, greedy vs non-greedy modes, ordering guarantees, JoinBlock variants (2-7 inputs), common patterns (ID-entity lookup, multi-source aggregation, synchronized fan-in), configuration options, completion and fault propagation, practical examples with Mermaid diagrams, best practices, common pitfalls, and exercise challenge. Materials available in learn/learn05.md.
+
+10/29/2025
+- Step: quiz
+- Status: completed
+- Result: 87.5% (7/8)
+- Topic: JoinBlock & Coordinated Data Flows
+- Summary: Passed quiz with 87.5% covering JoinBlock synchronization behavior, greedy vs non-greedy modes, ordering guarantees, input limits, common patterns, completion conditions, and configuration for memory management. Missed Q7 on completion requirements (answered first input vs all inputs). Quiz questions in learn/quiz05.md; answer key in learn/quiz05_answers.md.
+
+10/31/2025
+- Step: lab
+- Status: completed
+- Topic: JoinBlock & Coordinated Data Flows
+- Lab: lab/iter05
+- Result: Tests passing (dotnet run)
+- Summary: Completed Multi-Source Weather Dashboard using JoinBlock<Weather, AirQuality, Traffic> to synchronize three independent data streams. Implemented async fetch methods with simulated delays (100ms, 150ms, 80ms), built pipeline with BufferBlock→BroadcastBlock→three TransformBlocks→JoinBlock→ActionBlock, used greedy mode for synchronization, and proper completion propagation. Successfully coordinated parallel data sources with FIFO ordering guarantees.
