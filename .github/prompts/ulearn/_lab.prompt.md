@@ -4,6 +4,7 @@ description: Learning `lab` workflow step function
 model: GPT-5 (copilot)
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
+
 # Initialization
 Load, read and understand .github/prompts/lpp_spec.md
 
@@ -24,9 +25,9 @@ Load, read and understand .github/prompts/lpp_spec.md
 - Execute EXECUTE_WRITE_LOG(...) to create lab log record with $TOPIC and mark lab started.
 
 # Command Mapping
-- prev - go back to quiz module ($DIR/_quiz.prompt.md)
+- prev - EXECUTE_PROMPT($DIR/_quiz.prompt.md)
 - check - run lab tests and report success/failure. DO NOT fix code if tests fail/
-- next - mark lab completed then go to topic selection ($DIR/_topic.prompt.md)
+- next - EXECUTE_PROMPT($DIR/_topic.prompt.md)
 - explain - ask for where help is needed and provide hints tied to TODOs
 
 # Prompt Functions

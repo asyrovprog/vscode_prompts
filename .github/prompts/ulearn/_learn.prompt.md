@@ -4,7 +4,9 @@ model: GPT-5 (copilot)
 description: Learning `learn` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
+
+# Initialization
+Load, read and understand .github/prompts/lpp_spec.md
 
 # Goal
 
@@ -20,5 +22,5 @@ This function helps the user to learn provided $TOPIC. Your task is to come up w
 - Execute EXECUTE_WRITE_LOG(...) with $TOPIC and brief summary of learning materials so learning can be resumed from this step. Mark this step as started.
 
 # Command Mapping
-- prev - load topic selection module ($DIR/_topic.prompt.md)
-- next - mark learn completed and load quiz module ($DIR/_quiz.prompt.md)
+- prev - EXECUTE_PROMPT($DIR/_topic.prompt.md)
+- next - EXECUTE_PROMPT($DIR/_quiz.prompt.md)

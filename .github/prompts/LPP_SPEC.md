@@ -10,20 +10,18 @@ Prompt Module: Single text file containing: front-matter metadata, goal, optiona
 
 Runnable Prompt: The `# Instructions` section (exactly one). Executes sequentially, invokes Prompt Functions, handles commands. Must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally.
 
-Prompt Function: Named reusable instruction block (ALL_CAPS optional `()` suffix), MAY accept parameters (referenced as `$NAME`), and MAY return any value type: status string, plain text, number, object, array, or even another function. If returning a status string used for control-flow, its meaning SHOULD be documented (Kernel Spec if formal). Must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally.
+Prompt Function: Named reusable instruction block (ALL_CAPS optional `()` suffix), MAY accept parameters (referenced as `$NAME`), and MAY return any value type: status string, plain text, number, object, array, or even another function. If returning a status string used for control-flow. Must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally.
 
 Variable: Dynamic placeholder marked with `$` prefix (`$VAR`). Session-scoped unless explicitly persisted.
 
 Command: User token mapped to an action (branch, function invocation, transition).
 
-Outcome Statuses: Recommended baseline: SUCCESS (normal completion), FAILURE (did not achieve intended result). Authors MAY introduce additional status strings, but functions are free to return ANY value (text, number, object, array, function) and are NOT expected to use special keywords like HALT or RETRY unless they find them helpful and explicitly define them.
-
 ## 2. Module Types and Mandatory Sections
 
 There are two module types:
 
-1. Runnable Module (default): provides executable workflow logic.
-2. Library Module: provides only prompt function definitions; has no top-level execution.
+1. Runnable Module (default): provides executable workflow logic, this module contains top-level execution instructions.
+2. Library Module: provides only prompt function definitions; has no top-level execution instructions.
 
 ### 2.1 Runnable Module Required Order (normative):
 
@@ -36,7 +34,6 @@ Optional sections:
 - Imports (`# Include Instructions From` or `# Referenced Instructions`)
 - Prompt Functions (`# Prompt Functions`)
 - Command Mapping (`# Command Mapping` or “Response command handling”)
-- Kernel Spec (`# LPP Kernel Spec`)
 
 ### 2.2 Library Module Required Order (normative):
 
@@ -44,12 +41,12 @@ Optional sections:
 2. `# Goal`
 3. `# Prompt Functions`
 
-Library Modules MUST NOT include an `# Instructions` section.
+Library Modules MUST NOT include top-level `# Instructions` section.
 
 ## 3. Goal Section
 
 Header: `# Goal`
-Purpose: States intent boundary (what this module is for). MUST NOT contain procedural steps.
+Purpose: States intent boundary (what this module is for). This section does not contain procedural steps.
 
 ## 4. Imports
 
@@ -61,19 +58,19 @@ All paths MUST exist. Imports are declarative; execution only happens via explic
 
 Header: `# Prompt Functions`
 
-Each listed function SHOULD include:
+Each listed function MUST include following required sections:
 
-- Name
-- Brief description
-Optionally: params, returns, side-effects.
-Actual invocation logic lives in shared modules or in instructions.
+- Name with optional parameters. Examples: 
+    - `## FOO()`
+    - `## SHOW($MESSAGE)`
 
-Optional Subsection Conventions (non-normative but recommended for clarity):
+- `### Goal` – States intent boundary (what this module is for). This section does not contain procedural steps.
 
-- `### Goal` – plain-language intent of the function (no procedural steps).
-- `### Constraints` – bounded resource/time/LOC limits or invariants relevant to implementation; descriptive only.
-- `### Instructions` – ordered or bulleted implementation guidance internal to the function definition.
-Tooling MAY ignore these headings; their presence MUST NOT be required for validity.
+- `### Instructions` – Contains ordered imperative or control-flow statements which must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally. Steps MAY begin with a verb (Execute, Load, Validate, Ask, Set, Return) for clarity, but any single clear instruction is valid. Conditionals MUST be explicit ("If X then … else …").
+
+Optional Subsections:
+
+- `### Constraints` – bounded resource/time/LOC limits or invariants relevant to instructions; descriptive only. This section does not contain procedural steps.
 
 ## 6. Instructions Section
 
@@ -84,14 +81,12 @@ Contains ordered imperative or control-flow statements which must be executed as
 
 Header: `# Command Mapping` (or “Response command handling”).
 Format each line: `- <command> - <action description>`
-All user-exposed commands referenced in instructions MUST appear here.
-No duplicate command tokens.
+All user-exposed commands referenced in instructions MUST appear here. No duplicate command tokens.
 
 ## 8. Variables
 
 Syntax: `$IDENTIFIER`
-MUST be validated before critical use if derived from uncertain sources (user input, external files).
-SHOULD avoid silent mutation—any mutation is an explicit instruction step.
+Prompt program variable. Global unless explicitly specified as local. SHOULD avoid silent mutation—any mutation is an explicit instruction step.
 
 ---
 End of LPP Specification

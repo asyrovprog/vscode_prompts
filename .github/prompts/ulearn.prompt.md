@@ -6,10 +6,10 @@ tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTask
 ---
 
 # Initialization
-Load, read and understand .github/prompts/lpp_spec.md
+Load, read and understand: .github/prompts/lpp_spec.md
 
 # Goal
-Learning iteration main entry point
+Learning iteration main entry point. It decides what next prompt should be executed based on current stage of `learnlog.md`.
 
 # Include Instructions From
 - .github/prompts/ulearn/_shared.prompt.md
@@ -28,4 +28,3 @@ Learning iteration main entry point
         - last recorder checkpoint is topic
     - $DIR/_topic.prompt.md otherwise
 - If no `learnlog.md` then ask the user to provide topic ($TOPIC) to learn and EXECUTE_PROMPT($DIR/_learn.prompt.md)
-    - Execute EXECUTE_HALT() if $TOPIC not provided by user after request.
