@@ -144,3 +144,31 @@
 - Lab: lab/iter05
 - Result: Tests passing (dotnet run)
 - Summary: Completed Multi-Source Weather Dashboard using JoinBlock<Weather, AirQuality, Traffic> to synchronize three independent data streams. Implemented async fetch methods with simulated delays (100ms, 150ms, 80ms), built pipeline with BufferBlock→BroadcastBlock→three TransformBlocks→JoinBlock→ActionBlock, used greedy mode for synchronization, and proper completion propagation. Successfully coordinated parallel data sources with FIFO ordering guarantees.
+
+11/01/2025
+- Step: topic
+- Status: completed
+- Topic: Dynamic Routing & Predicate-Based Flow Control
+- Summary: Selected topic focusing on conditional links, branching pipelines, selective propagation via predicates and LinkOptions, and completion propagation nuances for flexible dataflow architectures.
+11/01/2025
+- Step: learn
+- Status: started
+- Topic: Dynamic Routing & Predicate-Based Flow Control
+- Summary: Introduced predicate-based routing (exclusive vs multi-cast), key patterns (priority split, audit tap, expansion, dynamic subscription), completion/fault nuances, performance guidelines, testing, and common mistakes.
+11/02/2025
+- Step: learn
+- Status: completed
+- Topic: Dynamic Routing & Predicate-Based Flow Control
+- Summary: Finalized materials covering predicate semantics, exclusive vs multi-cast routing, TransformMany expansion, audit taps, completion/fault nuances, performance and testing patterns, and common pitfalls.
+11/02/2025
+- Step: quiz
+- Status: completed
+- Result: 75%
+- Topic: Dynamic Routing & Predicate-Based Flow Control
+- Summary: Missed predicate motivation for avoiding source blocking (Q5 option D) and dynamic reconfiguration stability invariant documentation (Q8 option C). Needs reinforcement on reasons for cheap predicates (performance + blocking avoidance) and runtime link management best practices.
+
+11/02/2025
+- Step: lab
+- Status: started
+- Topic: Dynamic Routing & Predicate-Based Flow Control
+- Lab: lab/iter06

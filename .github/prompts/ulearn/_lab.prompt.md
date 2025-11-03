@@ -4,7 +4,8 @@ description: Learning `lab` workflow step function
 model: GPT-5 (copilot)
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-<!-- File specification (read for semantics): .github/prompts/LPP_SPEC.md (LPP_SPEC_ID: LPP_STABLE) -->
+# Initialization
+Load, read and understand .github/prompts/lpp_spec.md
 
 # Goal
 - This function helps the user to learn provided $TOPIC through leetcode style programming assignment (lab)

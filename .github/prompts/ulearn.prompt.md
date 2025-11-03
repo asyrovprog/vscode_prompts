@@ -1,10 +1,12 @@
 ---
 mode: agent
+model: Claude Sonnet 4.5 (copilot)
 description: Learning iteration main entry point
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
 
-> Must read .github/prompts/LPP_SPEC.md
+# Initialization
+Load, read and understand .github/prompts/lpp_spec.md
 
 # Goal
 Learning iteration main entry point
