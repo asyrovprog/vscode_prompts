@@ -172,3 +172,23 @@
 - Status: started
 - Topic: Dynamic Routing & Predicate-Based Flow Control
 - Lab: lab/iter06
+
+11/03/2025
+- Step: lab
+- Status: completed
+- Topic: Dynamic Routing & Predicate-Based Flow Control
+- Lab: lab/iter06
+- Result: Tests passing (dotnet run)
+- Summary: Completed Smart Event Router implementing predicate-based routing with BroadcastBlock for multi-cast support. Successfully routed events to specialized handlers (Security, Performance, General) based on category and severity predicates, implemented audit tap for all Critical events, and verified proper completion propagation across all handlers. Demonstrated exclusive routing with multi-cast audit pattern.
+
+11/03/2025
+- Step: topic
+- Status: completed
+- Topic: WriteOnceBlock & Immutable Broadcasting
+- Summary: Selected foundational topic covering single-value blocks, race conditions in concurrent writes, immutable message broadcasting patterns, and single-assignment semantics as natural extension from BroadcastBlock.
+
+11/03/2025
+- Step: learn
+- Status: started
+- Topic: WriteOnceBlock & Immutable Broadcasting
+- Summary: Covered WriteOnceBlock fundamentals including single-assignment semantics, first-wins race resolution, immutable broadcasting (no cloning), comparison with BroadcastBlock, common patterns (first-wins competition, lazy initialization, signal broadcasting), completion behavior, practical examples, and best practices. Materials saved to learn/learn07.md.
