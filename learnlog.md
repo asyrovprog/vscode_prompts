@@ -189,6 +189,39 @@
 
 11/03/2025
 - Step: learn
-- Status: started
+- Status: completed
 - Topic: WriteOnceBlock & Immutable Broadcasting
 - Summary: Covered WriteOnceBlock fundamentals including single-assignment semantics, first-wins race resolution, immutable broadcasting (no cloning), comparison with BroadcastBlock, common patterns (first-wins competition, lazy initialization, signal broadcasting), completion behavior, practical examples, and best practices. Materials saved to learn/learn07.md.
+
+11/08/2025
+- Step: quiz
+- Status: completed
+- Result: 100%
+- Topic: WriteOnceBlock & Immutable Broadcasting
+- Summary: Perfect score on WriteOnceBlock quiz covering single-assignment semantics, cloning behavior (always null), Post() return values, comparison with BroadcastBlock, appropriate use cases (first-wins races, lazy init, signal broadcasting), completion behavior, instance sharing, and race condition patterns. Questions in learn/quiz07.md; answers in learn/quiz07_answers.md.
+
+11/08/2025
+- Step: lab
+- Status: started
+- Topic: WriteOnceBlock & Immutable Broadcasting
+- Lab: lab/iter07
+
+11/09/2025
+- Step: lab
+- Status: completed
+- Topic: WriteOnceBlock & Immutable Broadcasting
+- Lab: lab/iter07
+- Result: Tests passing (dotnet run)
+- Summary: Completed Start Signal Coordinator using WriteOnceBlock to broadcast start signal to multiple workers. Implemented single-assignment signal block with null cloning function, worker tasks using ReceiveAsync() to wait for signal, thread-safe counter increments with Interlocked, and coordination logic with Task.WhenAll/WhenAny for timeout handling. Successfully demonstrated WriteOnceBlock single-assignment semantics (first Post wins, subsequent rejected) and immutable broadcasting to multiple concurrent consumers.
+
+11/09/2025
+- Step: topic
+- Status: completed
+- Topic: DataflowBlock.Encapsulate & Advanced Composition
+- Summary: Selected advanced topic covering sophisticated encapsulation patterns, building reusable dataflow libraries, multi-stage internal pipelines, exposing minimal interfaces, and advanced composition techniques building upon previous custom blocks knowledge.
+
+11/09/2025
+- Step: learn
+- Status: started
+- Topic: DataflowBlock.Encapsulate & Advanced Composition
+- Summary: Covered DataflowBlock.Encapsulate fundamentals including method signature and core concept (wrapping target/source into IPropagatorBlock), advanced patterns (filter-transform-route, configurable blocks, fork-join with diagnostics, retry logic), completion propagation rules (PropagateCompletion=true requirement), best practices, multi-stage pipeline examples, testing strategies, and performance considerations. Materials saved to learn/learn08.md.

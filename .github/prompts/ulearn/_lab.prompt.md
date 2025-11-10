@@ -21,7 +21,7 @@ Load, read and understand .github/prompts/lpp_spec.md
 - Verify if any labs are marked unfinished in `learnlog.md`; if so ask user to complete those first and Execute EXECUTE_HALT().
 - Otherwise:
     - Propose 2-3 high level lab concept options and ask user to choose.
-    - Execute IMPLEMENT_LAB(); if it returns FAILURE (too complex or poorly designed) propose alternative concepts and retry once; on second FAILURE Return FAILURE.
+    - Execute IMPLEMENT_LAB(); if it returns FAILURE (too complex or poorly designed) propose alternative concepts and retry once; on second FAILURE execute EXECUTE_HALT().
 - Execute EXECUTE_WRITE_LOG(...) to create lab log record with $TOPIC and mark lab started.
 
 # Command Mapping
@@ -43,7 +43,7 @@ Load, read and understand .github/prompts/lpp_spec.md
 - Provide ≥2 TODOs (N1, N2; optional N3) with at least one non-trivial function.
 - Public shipped code must contain stubs with `[YOUR CODE GOES HERE]` and NotImplemented exceptions (or raises in Python).
 - Tests (public form) must FAIL and mention both TODO ID and corresponding README section title.
-- Scope must remain strictly on $TOPIC (avoid unrelated parsing/I/O/etc.).
+- Scope must remain strictly on $TOPIC (avoid unrelated time consuming code).
 - Private working solution must appear only inside a collapsed section in `REF.md`; never remain in task file when shipped.
 - "Never auto-complete TODOs" applies only after private verification (public form); private completion is required.
 - Up to 3 private attempts to achieve all PASSing tests; otherwise delete iteration folder and return FAILURE.
@@ -58,15 +58,18 @@ Load, read and understand .github/prompts/lpp_spec.md
 - Scaffold:
     - Create `lab/iterNN/` (increment NN).
     - Add `README.md` with a section per TODO (title format: "TODO N1 – <title>").
+    - Copy instructions for each TODO under each corresponding [YOUR CODE GOES HERE] for easy access.
     - Add task file (`Task.cs` for C# or `task.py` for Python) containing stub blocks:
         ```csharp
         // TODO[N1]: <objective>
         // [YOUR CODE GOES HERE]
+        // <copy of instructions from readme.md for [N1]>
         throw new NotImplementedException("TODO[N1]");
         ```
         ```python
         # TODO[N1]: <objective>
         # [YOUR CODE GOES HERE]
+        # <copy of instructions for readme.md for [N1]>
         raise NotImplementedError("TODO[N1]")
         ```
     - Add test harness (`Program.cs` or `run.py`) printing PASS/FAIL per test.
@@ -92,5 +95,6 @@ Load, read and understand .github/prompts/lpp_spec.md
     - Public test run: failures contain both TODO ID and matching README section title.
     - Stubs contain `[YOUR CODE GOES HERE]` markers and correct NotImplemented throws/raises.
     - If any validation fails RETURN FAILURE.
+    - Verify instructions for each TODO under each corresponding [YOUR CODE GOES HERE] available for easy access.
 - Outcome:
     - RETURN SUCCESS on validated stubbed public lab; else FAILURE.
