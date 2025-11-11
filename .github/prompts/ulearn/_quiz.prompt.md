@@ -1,6 +1,5 @@
 ---
 mode: agent
-model: GPT-5 (copilot)
 description: Learning `quiz` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---

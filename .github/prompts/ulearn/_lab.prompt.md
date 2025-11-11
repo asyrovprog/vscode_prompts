@@ -38,8 +38,8 @@ Load, read and understand .github/prompts/lpp_spec.md
 - Design a solvable lab for $TOPIC; privately implement and pass all tests, then publish a stubbed version whose tests fail and guide the learner via TODO IDs.
 
 ### Constraints
-- Learner effort ≤ ~30 minutes (reading + coding).
-- Learner-added code ≤ 100 LOC total; any single TODO body ≤ 60 LOC.
+- Learner effort ≤ ~25 minutes (reading + coding).
+- Learner-added code ≤ 90 LOC total; any single TODO body ≤ 60 LOC.
 - Provide ≥2 TODOs (N1, N2; optional N3) with at least one non-trivial function.
 - Public shipped code must contain stubs with `[YOUR CODE GOES HERE]` and NotImplemented exceptions (or raises in Python).
 - Tests (public form) must FAIL and mention both TODO ID and corresponding README section title.

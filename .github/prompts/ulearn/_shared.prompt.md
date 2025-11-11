@@ -1,10 +1,8 @@
 ---
 mode: agent
-model: GPT-5 (copilot)
 description: Learning `topic` workflow step function
 tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
 ---
-
 # Initialization
 Load, read and understand .github/prompts/lpp_spec.md
 
@@ -64,7 +62,7 @@ Persist a log entry of the current learning workflow step status and optional re
 10/22/2025
 - Step: quiz
 - Status: completed
-- Result: 70%
+- Result: 80%
 - Topic: TCP/IP
 
 10/22/2025

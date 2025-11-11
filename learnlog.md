@@ -222,6 +222,19 @@
 
 11/09/2025
 - Step: learn
+- Status: completed
+- Topic: DataflowBlock.Encapsulate & Advanced Composition
+- Summary: Covered DataflowBlock.Encapsulate fundamentals including method signature and core concept (wrapping target/source into IPropagatorBlock), advanced patterns (filter-transform-route, configurable blocks, fork-join with diagnostics, retry logic), completion propagation rules (PropagateCompletion=true requirement), best practices, multi-stage pipeline examples, testing strategies, and performance considerations. Discussed exception handling implications - throwing exceptions in transforms faults entire pipeline, production patterns use Result types, routing, or filtering instead. Materials saved to learn/learn08.md.
+
+11/10/2025
+- Step: quiz
+- Status: completed
+- Result: 90% (9/10)
+- Topic: DataflowBlock.Encapsulate & Advanced Composition
+- Summary: Scored 90% on advanced composition quiz covering Encapsulate return type (IPropagatorBlock), required parameters (target entry + source exit), completion propagation (PropagateCompletion=true mandatory), exception handling (faults entire pipeline), production error patterns, interface abstraction benefits, configuration patterns, internal block visibility, diagnostics approaches, and retry logic. Missed Q5 on production patterns - selected BCDE instead of BCD (letting exceptions propagate faults pipeline, not a production pattern). Questions in learn/quiz08.md; answers in learn/quiz08_answers.md.
+11/10/2025
+- Step: lab
 - Status: started
 - Topic: DataflowBlock.Encapsulate & Advanced Composition
-- Summary: Covered DataflowBlock.Encapsulate fundamentals including method signature and core concept (wrapping target/source into IPropagatorBlock), advanced patterns (filter-transform-route, configurable blocks, fork-join with diagnostics, retry logic), completion propagation rules (PropagateCompletion=true requirement), best practices, multi-stage pipeline examples, testing strategies, and performance considerations. Materials saved to learn/learn08.md.
+- Lab: lab/iter08
+
