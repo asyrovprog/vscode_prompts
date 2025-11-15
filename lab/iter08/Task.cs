@@ -25,8 +25,8 @@ namespace Lab.Iter08
         public T? Value { get; init; }
         public string? ErrorMessage { get; init; }
 
-        public static Result<T> Success(T value) => throw new NotImplementedException("TODO[N1]");
-        public static Result<T> Failure(string error) => throw new NotImplementedException("TODO[N1]");
+        public static Result<T> Success(T value) => new Result<T> { IsSuccess = true, Value = value };
+        public static Result<T> Failure(string error) => new Result<T> { IsSuccess = false, ErrorMessage = error };
     }
 
     // TODO N3 – Implement Statistics Tracking
@@ -47,19 +47,25 @@ namespace Lab.Iter08
     //   - IncrementStandard(): Increment standard count
     // 
     // [YOUR CODE GOES HERE]
-    public class ProcessorStats
+public class ProcessorStats
     {
-        public int TotalProcessed => throw new NotImplementedException("TODO[N3]");
-        public int SuccessCount => throw new NotImplementedException("TODO[N3]");
-        public int FailureCount => throw new NotImplementedException("TODO[N3]");
-        public int ExpressCount => throw new NotImplementedException("TODO[N3]");
-        public int StandardCount => throw new NotImplementedException("TODO[N3]");
+        private int _totalProcessed;
+        private int _successCount;
+        private int _failureCount;
+        private int _expressCount;
+        private int _standardCount;
 
-        public void IncrementTotal() => throw new NotImplementedException("TODO[N3]");
-        public void IncrementSuccess() => throw new NotImplementedException("TODO[N3]");
-        public void IncrementFailure() => throw new NotImplementedException("TODO[N3]");
-        public void IncrementExpress() => throw new NotImplementedException("TODO[N3]");
-        public void IncrementStandard() => throw new NotImplementedException("TODO[N3]");
+        public int TotalProcessed => Volatile.Read(ref _totalProcessed);
+        public int SuccessCount => Volatile.Read(ref _successCount);
+        public int FailureCount => Volatile.Read(ref _failureCount);
+        public int ExpressCount => Volatile.Read(ref _expressCount);
+        public int StandardCount => Volatile.Read(ref _standardCount);
+
+        public void IncrementTotal() => Interlocked.Increment(ref _totalProcessed);
+        public void IncrementSuccess() => Interlocked.Increment(ref _successCount);
+        public void IncrementFailure() => Interlocked.Increment(ref _failureCount);
+        public void IncrementExpress() => Interlocked.Increment(ref _expressCount);
+        public void IncrementStandard() => Interlocked.Increment(ref _standardCount);
     }
 
     public class OrderProcessor
@@ -74,9 +80,18 @@ namespace Lab.Iter08
         // CRITICAL: Never throw exceptions - always return Result<Order>
         // 
         // [YOUR CODE GOES HERE]
+
         public static Result<Order> ValidateOrder(Order order)
         {
-            throw new NotImplementedException("TODO[N1]");
+            if (order.Amount <= 0)
+            {
+                return Result<Order>.Failure("Invalid amount");
+            }
+            else if (!order.Email.Contains("@"))
+            {
+                return Result<Order>.Failure("Invalid email");
+            }
+            return Result<Order>.Success(order);
         }
 
         // TODO N2 – Build Encapsulated Pipeline
@@ -106,7 +121,81 @@ namespace Lab.Iter08
         // [YOUR CODE GOES HERE]
         public static IPropagatorBlock<Order, Result<Order>> CreateProcessor(ProcessorStats stats)
         {
-            throw new NotImplementedException("TODO[N2]");
+            var input = new BufferBlock<Order>(new DataflowBlockOptions
+            {
+                BoundedCapacity = 1024,
+                EnsureOrdered = false,
+            });
+
+            var validator = new TransformBlock<Order, Result<Order>>((o) =>
+            {
+                stats.IncrementTotal();
+                var result = ValidateOrder(o);
+                if (result.IsSuccess)
+                {
+                    stats.IncrementSuccess();
+                }
+                else
+                {
+                    stats.IncrementFailure();
+                }
+                return result;
+            }, new ExecutionDataflowBlockOptions
+            {
+                BoundedCapacity = 1024,
+                MaxDegreeOfParallelism = Environment.ProcessorCount,
+                EnsureOrdered = false
+            });
+
+            var pricer = new TransformBlock<Result<Order>, Result<Order>>(o =>
+            {
+                if (o.IsSuccess && o.Value.Amount > 1000)
+                {
+                    var discounted = new Order(o.Value.CustomerName, o.Value.Email, o.Value.Amount * (decimal) 0.9, o.Value.IsExpress);
+                    return Result<Order>.Success(discounted);
+                }
+                return o;
+            }, new ExecutionDataflowBlockOptions
+            {
+                BoundedCapacity = 1024,
+                EnsureOrdered = false,
+                MaxDegreeOfParallelism = Environment.ProcessorCount
+            });
+
+            var router = new TransformBlock<Result<Order>, Result<Order>>(o =>
+            {
+                if (o.IsSuccess)
+                {
+                    if (o.Value.IsExpress)
+                        stats.IncrementExpress();
+                    else
+                        stats.IncrementStandard();
+                }
+                return o;
+            }, new ExecutionDataflowBlockOptions
+            {
+                BoundedCapacity = 1024,
+                EnsureOrdered = false,
+                MaxDegreeOfParallelism = Environment.ProcessorCount
+            });
+
+            var output = new BufferBlock<Result<Order>>(new DataflowBlockOptions
+            {
+                BoundedCapacity = 1024,
+                EnsureOrdered = false,
+            });
+
+            var linkOpts = new DataflowLinkOptions
+            {
+                PropagateCompletion = true,
+            };
+
+            input.LinkTo(validator, linkOpts);
+            validator.LinkTo(pricer, linkOpts);
+            pricer.LinkTo(router, linkOpts);
+            router.LinkTo(output, linkOpts);
+
+            return DataflowBlock.Encapsulate(input, output);
         }
     }
 }

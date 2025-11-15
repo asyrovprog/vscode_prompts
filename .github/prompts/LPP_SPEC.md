@@ -10,9 +10,9 @@ Prompt Module: Single text file containing: front-matter metadata, goal, optiona
 
 Runnable Prompt: The `# Instructions` section (exactly one). Executes sequentially, invokes Prompt Functions, handles commands. Must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally.
 
-Prompt Function: Named reusable instruction block (ALL_CAPS optional `()` suffix), MAY accept parameters (referenced as `$NAME`), and MAY return any value type: status string, plain text, number, object, array, or even another function. If returning a status string used for control-flow. Must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally.
+Prompt Function: Named reusable instruction block (ALL_CAPS optional `()` suffix), MAY accept parameters (referenced as `$NAME`), and MAY return any value type: status string, plain text, number, object, array, or even another function. Must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally.
 
-Variable: Dynamic placeholder marked with `$` prefix (`$VAR`). Session-scoped unless explicitly persisted.
+Variable: Dynamic placeholder marked with `$` prefix (`$VAR`). Session-scoped unless explicitly stated as local to Prompt Function.
 
 Command: User token mapped to an action (branch, function invocation, transition).
 

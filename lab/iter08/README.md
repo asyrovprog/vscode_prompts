@@ -7,8 +7,15 @@ Build an encapsulated dataflow block that processes customer orders with validat
 Your e-commerce system processes customer orders. Each order needs:
 1. **Validation** - Check for valid data (positive amount, valid email)
 2. **Pricing** - Apply discounts based on customer tier
-3. **Routing** - Route to express or standard fulfillment
+3. **Routing** - Route to express or standard fulfillment based on `Order.IsExpress` flag
 4. **Error Handling** - Track failures without stopping the pipeline
+
+**Order Data Model**:
+```csharp
+public record Order(string CustomerName, string Email, decimal Amount, bool IsExpress);
+```
+- `IsExpress = true` → Express fulfillment (track in stats.ExpressCount)
+- `IsExpress = false` → Standard fulfillment (track in stats.StandardCount)
 
 Requirements:
 - Use Result<T> pattern for resilient error handling
@@ -44,11 +51,26 @@ Requirements:
 - Entry point: BufferBlock<Order>
 - Stage 1: Validation (TransformBlock<Order, Result<Order>>)
 - Stage 2: Pricing - apply discounts (TransformBlock, pass through failures)
-- Stage 3: Route by category - express vs standard (use predicates, pass through failures)
+- Stage 3: Router - track express (IsExpress=true) vs standard (IsExpress=false) stats, pass through failures
 - Stage 4: Merge results into single output (BufferBlock<Result<Order>>)
 - **Set PropagateCompletion = true** on ALL internal links
 - Use DataflowBlock.Encapsulate to wrap input and output
 - Return IPropagatorBlock<Order, Result<Order>>
+
+**Pipeline Architecture**:
+```mermaid
+graph LR
+    A[BufferBlock&lt;Order&gt;<br/>Entry Point] --> B[TransformBlock<br/>Validator<br/>stats.IncrementTotal]
+    B --> C[TransformBlock<br/>Pricer<br/>Apply Discounts]
+    C --> D[TransformBlock<br/>Router<br/>Track Express/Standard]
+    D --> E[BufferBlock&lt;Result&lt;Order&gt;&gt;<br/>Exit Point]
+    
+    style A fill:#e1f5ff,stroke:#0366d6
+    style B fill:#fff3cd,stroke:#ffc107
+    style C fill:#d4edda,stroke:#28a745
+    style D fill:#d4edda,stroke:#28a745
+    style E fill:#e1f5ff,stroke:#0366d6
+```
 
 **Key Concepts**:
 - Multi-stage internal pipeline
@@ -65,8 +87,8 @@ Requirements:
   - `TotalProcessed` - total orders received
   - `SuccessCount` - successfully processed orders
   - `FailureCount` - validation failures
-  - `ExpressCount` - orders routed to express
-  - `StandardCount` - orders routed to standard
+  - `ExpressCount` - orders with IsExpress=true (successful only)
+  - `StandardCount` - orders with IsExpress=false (successful only)
 - Pass stats object to pipeline creation
 - Update counters at appropriate stages (thread-safe with Interlocked)
 - Stats should be accessible after processing completes

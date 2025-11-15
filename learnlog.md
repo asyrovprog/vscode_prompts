@@ -238,3 +238,22 @@
 - Topic: DataflowBlock.Encapsulate & Advanced Composition
 - Lab: lab/iter08
 
+11/12/2025
+- Step: lab
+- Status: completed
+- Topic: DataflowBlock.Encapsulate & Advanced Composition
+- Lab: lab/iter08
+- Result: Tests passing (dotnet run)
+- Summary: Completed Resilient Data Processor using Result<T> pattern for production-ready error handling. Implemented Result<T> record type for success/failure representation, ValidateOrder method with validation logic (amount > 0, email contains "@"), encapsulated 4-stage pipeline (validator → pricer → router → output) using DataflowBlock.Encapsulate, and thread-safe ProcessorStats class with Interlocked operations. Successfully demonstrated PropagateCompletion on all internal links, price discounting for orders > $1000, express/standard routing based on IsExpress flag, and resilient processing without pipeline faults (8 orders: 6 success, 2 validation failures).
+
+11/12/2025
+- Step: topic
+- Status: completed
+- Topic: CancellationToken Integration & Graceful Shutdown
+- Summary: Selected topic covering cancellation propagation through dataflow pipelines, coordinated cancellation across multiple blocks, timeout patterns, partial completion handling, and resource cleanup strategies for production-ready dataflow applications.
+
+11/12/2025
+- Step: learn
+- Status: started
+- Topic: CancellationToken Integration & Graceful Shutdown
+- Summary: Comprehensive materials covering CancellationToken fundamentals, cancellation propagation patterns (block-level and pipeline-wide), three terminal states (Completed/Canceled/Faulted), graceful shutdown with two-phase pattern (Complete→timeout→Cancel), timeout patterns (fixed, sliding, linked), OperationCanceledException handling, resource cleanup patterns (IDisposable, completion callbacks), practical cancellable pipeline example, common pitfalls, best practices, and decision tree for choosing cancellation strategies. Materials saved to learn/learn09.md.
