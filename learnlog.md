@@ -1,40 +1,44 @@
 10/24/2025
 - Step: learn
+- Id: 01
 - Status: completed
 - Topic: C# DataFlow library (System.Threading.Tasks.Dataflow)
 - Summary: Covered core concepts including dataflow blocks (Source, Target, Propagator), block linking, completion flow control, common block types (BufferBlock, ActionBlock, TransformBlock, etc.), configuration options, and practical examples of pipeline construction. Materials saved to learn/learn01.md.
+
 10/24/2025
 - Step: quiz
+- Id: 01
 - Status: completed
 - Result: 100%
 - Topic: C# DataFlow library (System.Threading.Tasks.Dataflow)
 - Summary: Scored perfect on fundamentals quiz covering block types, linking, parallelism, completion propagation, backpressure, and use-case scenarios. Questions in learn/quiz01.md; answers in learn/quiz01_answers.md.
+
 10/24/2025
 - Step: lab
+- Id: 01
 - Status: completed
 - Topic: C# DataFlow library (System.Threading.Tasks.Dataflow)
 - Lab: lab/iter01
 - Result: Tests passing (dotnet run)
 - Summary: Completed text analytics pipeline using TransformBlock for metrics and ActionBlock for aggregation, demonstrating bounded capacity, controlled parallelism, and completion propagation.
+
 10/24/2025
 - Step: topic
-- Status: completed
-- Topic: BatchBlock & Grouping Data in TPL Dataflow
-- Summary: Selected foundational topic covering batching messages for efficient bulk processing, batch sizing strategies, and coordinating grouped data flows.
-10/24/2025
-- Step: topic
+- Id: 02
 - Status: completed
 - Topic: BatchBlock & Grouping Data in TPL Dataflow
 - Summary: Selected foundational topic covering batching messages for efficient bulk processing, batch sizing strategies, and coordinating grouped data flows.
 
 10/24/2025
 - Step: learn
+- Id: 02
 - Status: completed
 - Topic: BatchBlock & Grouping Data in TPL Dataflow
 - Summary: Covered BatchBlock fundamentals including batch sizing, greedy vs non-greedy modes, TriggerBatch(), time-based batching patterns, bulk operations, coordination scenarios, and best practices. Materials saved to learn/learn02.md.
 
 10/24/2025
 - Step: quiz
+- Id: 02
 - Status: completed
 - Result: 100%
 - Topic: BatchBlock & Grouping Data in TPL Dataflow
@@ -42,6 +46,7 @@
 
 10/24/2025
 - Step: lab
+- Id: 02
 - Status: completed
 - Topic: BatchBlock & Grouping Data in TPL Dataflow
 - Lab: lab/iter02
@@ -50,18 +55,21 @@
 
 10/24/2025
 - Step: topic
+- Id: 03
 - Status: completed
 - Topic: Error Handling & Block Faults in TPL Dataflow
 - Summary: Selected foundational topic covering exception handling in dataflow blocks, fault propagation mechanisms, recovery strategies, and graceful degradation patterns.
 
 10/24/2025
 - Step: learn
+- Id: 03
 - Status: completed
 - Topic: Error Handling & Block Faults in TPL Dataflow
 - Summary: Covered block fault states, fault propagation with PropagateCompletion, three error handling strategies (try-catch, predicate filtering, pipeline-level monitoring), AggregateException handling, cancellation vs faults, and best practices for resilient pipelines. Materials saved to learn/learn03.md.
 
 10/24/2025
 - Step: quiz
+- Id: 03
 - Status: completed
 - Result: 100%
 - Topic: Error Handling & Block Faults in TPL Dataflow
@@ -69,6 +77,7 @@
 
 10/24/2025
 - Step: lab
+- Id: 03
 - Status: completed
 - Topic: Error Handling & Block Faults in TPL Dataflow
 - Lab: lab/iter03
@@ -77,41 +86,51 @@
 
 10/26/2025
 - Step: topic
+- Id: 04
 - Status: completed
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Summary: Selected foundational topic covering creation of custom dataflow blocks, encapsulating pipelines as reusable components, block composition patterns, and building higher-level abstractions.
 
 10/26/2025
 - Step: learn
+- Id: 04
 - Status: started
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Summary: Learning how to create reusable dataflow components by encapsulating pipelines, building custom blocks with Encapsulate method, and applying composition patterns for maintainable dataflow architectures.
+
 10/26/2025
 - Step: learn
+- Id: 04
 - Status: completed
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Summary: Added comprehensive materials with diagrams, heuristics, patterns (filter-transform, validate-route, throttle, fork-join), checklist, and exercise.
 
 10/26/2025
 - Step: quiz
+- Id: 04
 - Status: completed
 - Result: 60%
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Summary: Quiz04 covering encapsulation purpose, exposed interfaces, completion prerequisites, use cases vs custom implementation, logging location, fault propagation, checklist items, and abstraction benefits. Questions in learn/quiz04.md; answers in learn/quiz04_answers.md.
+
 10/26/2025
 - Step: quiz-retry
+- Id: 04
 - Status: completed
 - Result: 33%
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Summary: First retry attempt; incorrect on interface exposure, checklist completeness, checklist purpose rationale, and fix strategy question. Needs reinforcement on exposed interfaces (target/source pairing), reasons to encapsulate (adding D & E), full checklist (include configuration params), and lifecycle vs ordering guarantees.
+
 10/26/2025
 - Step: lab
+- Id: 04
 - Status: started
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Lab: lab/iter04
 
 10/27/2025
 - Step: lab
+- Id: 04
 - Status: completed
 - Topic: Custom Blocks & Encapsulation in TPL Dataflow
 - Lab: lab/iter04
@@ -120,18 +139,21 @@
 
 10/27/2025
 - Step: topic
+- Id: 05
 - Status: completed
 - Topic: JoinBlock & Coordinated Data Flows
 - Summary: Selected foundational topic covering synchronization of multiple data streams, greedy vs non-greedy joining modes, coordination of parallel data sources, and building complex multi-input workflows.
 
 10/29/2025
 - Step: learn
+- Id: 05
 - Status: completed
 - Topic: JoinBlock & Coordinated Data Flows
 - Summary: Completed comprehensive learning materials covering JoinBlock fundamentals including multi-input target interfaces, greedy vs non-greedy modes, ordering guarantees, JoinBlock variants (2-7 inputs), common patterns (ID-entity lookup, multi-source aggregation, synchronized fan-in), configuration options, completion and fault propagation, practical examples with Mermaid diagrams, best practices, common pitfalls, and exercise challenge. Materials available in learn/learn05.md.
 
 10/29/2025
 - Step: quiz
+- Id: 05
 - Status: completed
 - Result: 87.5% (7/8)
 - Topic: JoinBlock & Coordinated Data Flows
@@ -139,6 +161,7 @@
 
 10/31/2025
 - Step: lab
+- Id: 05
 - Status: completed
 - Topic: JoinBlock & Coordinated Data Flows
 - Lab: lab/iter05
@@ -147,21 +170,28 @@
 
 11/01/2025
 - Step: topic
+- Id: 06
 - Status: completed
 - Topic: Dynamic Routing & Predicate-Based Flow Control
 - Summary: Selected topic focusing on conditional links, branching pipelines, selective propagation via predicates and LinkOptions, and completion propagation nuances for flexible dataflow architectures.
+
 11/01/2025
 - Step: learn
+- Id: 06
 - Status: started
 - Topic: Dynamic Routing & Predicate-Based Flow Control
 - Summary: Introduced predicate-based routing (exclusive vs multi-cast), key patterns (priority split, audit tap, expansion, dynamic subscription), completion/fault nuances, performance guidelines, testing, and common mistakes.
+
 11/02/2025
 - Step: learn
+- Id: 06
 - Status: completed
 - Topic: Dynamic Routing & Predicate-Based Flow Control
 - Summary: Finalized materials covering predicate semantics, exclusive vs multi-cast routing, TransformMany expansion, audit taps, completion/fault nuances, performance and testing patterns, and common pitfalls.
+
 11/02/2025
 - Step: quiz
+- Id: 06
 - Status: completed
 - Result: 75%
 - Topic: Dynamic Routing & Predicate-Based Flow Control
@@ -169,12 +199,14 @@
 
 11/02/2025
 - Step: lab
+- Id: 06
 - Status: started
 - Topic: Dynamic Routing & Predicate-Based Flow Control
 - Lab: lab/iter06
 
 11/03/2025
 - Step: lab
+- Id: 06
 - Status: completed
 - Topic: Dynamic Routing & Predicate-Based Flow Control
 - Lab: lab/iter06
@@ -183,18 +215,21 @@
 
 11/03/2025
 - Step: topic
+- Id: 07
 - Status: completed
 - Topic: WriteOnceBlock & Immutable Broadcasting
 - Summary: Selected foundational topic covering single-value blocks, race conditions in concurrent writes, immutable message broadcasting patterns, and single-assignment semantics as natural extension from BroadcastBlock.
 
 11/03/2025
 - Step: learn
+- Id: 07
 - Status: completed
 - Topic: WriteOnceBlock & Immutable Broadcasting
 - Summary: Covered WriteOnceBlock fundamentals including single-assignment semantics, first-wins race resolution, immutable broadcasting (no cloning), comparison with BroadcastBlock, common patterns (first-wins competition, lazy initialization, signal broadcasting), completion behavior, practical examples, and best practices. Materials saved to learn/learn07.md.
 
 11/08/2025
 - Step: quiz
+- Id: 07
 - Status: completed
 - Result: 100%
 - Topic: WriteOnceBlock & Immutable Broadcasting
@@ -202,12 +237,14 @@
 
 11/08/2025
 - Step: lab
+- Id: 07
 - Status: started
 - Topic: WriteOnceBlock & Immutable Broadcasting
 - Lab: lab/iter07
 
 11/09/2025
 - Step: lab
+- Id: 07
 - Status: completed
 - Topic: WriteOnceBlock & Immutable Broadcasting
 - Lab: lab/iter07
@@ -216,30 +253,36 @@
 
 11/09/2025
 - Step: topic
+- Id: 08
 - Status: completed
 - Topic: DataflowBlock.Encapsulate & Advanced Composition
 - Summary: Selected advanced topic covering sophisticated encapsulation patterns, building reusable dataflow libraries, multi-stage internal pipelines, exposing minimal interfaces, and advanced composition techniques building upon previous custom blocks knowledge.
 
 11/09/2025
 - Step: learn
+- Id: 08
 - Status: completed
 - Topic: DataflowBlock.Encapsulate & Advanced Composition
 - Summary: Covered DataflowBlock.Encapsulate fundamentals including method signature and core concept (wrapping target/source into IPropagatorBlock), advanced patterns (filter-transform-route, configurable blocks, fork-join with diagnostics, retry logic), completion propagation rules (PropagateCompletion=true requirement), best practices, multi-stage pipeline examples, testing strategies, and performance considerations. Discussed exception handling implications - throwing exceptions in transforms faults entire pipeline, production patterns use Result types, routing, or filtering instead. Materials saved to learn/learn08.md.
 
 11/10/2025
 - Step: quiz
+- Id: 08
 - Status: completed
 - Result: 90% (9/10)
 - Topic: DataflowBlock.Encapsulate & Advanced Composition
 - Summary: Scored 90% on advanced composition quiz covering Encapsulate return type (IPropagatorBlock), required parameters (target entry + source exit), completion propagation (PropagateCompletion=true mandatory), exception handling (faults entire pipeline), production error patterns, interface abstraction benefits, configuration patterns, internal block visibility, diagnostics approaches, and retry logic. Missed Q5 on production patterns - selected BCDE instead of BCD (letting exceptions propagate faults pipeline, not a production pattern). Questions in learn/quiz08.md; answers in learn/quiz08_answers.md.
+
 11/10/2025
 - Step: lab
+- Id: 08
 - Status: started
 - Topic: DataflowBlock.Encapsulate & Advanced Composition
 - Lab: lab/iter08
 
 11/12/2025
 - Step: lab
+- Id: 08
 - Status: completed
 - Topic: DataflowBlock.Encapsulate & Advanced Composition
 - Lab: lab/iter08
@@ -248,12 +291,39 @@
 
 11/12/2025
 - Step: topic
-- Status: completed
+- Id: 09
+- Status: started
 - Topic: CancellationToken Integration & Graceful Shutdown
 - Summary: Selected topic covering cancellation propagation through dataflow pipelines, coordinated cancellation across multiple blocks, timeout patterns, partial completion handling, and resource cleanup strategies for production-ready dataflow applications.
 
-11/12/2025
+11/14/2025
 - Step: learn
+- Id: 09
+- Status: completed
+- Topic: CancellationToken Integration & Graceful Shutdown
+- Summary: Studied cooperative cancellation patterns (block-level vs pipeline-wide tokens), terminal states vs faults, graceful two-phase shutdown, timeout/linking strategies, OperationCanceledException handling, and cleanup/diagnostics patterns. Materials in learn/learn09.md.
+
+11/14/2025
+- Step: quiz
+- Id: 09
+- Status: completed
+- Result: 50% (4/8)
+- Topic: CancellationToken Integration & Graceful Shutdown
+- Summary: Failed initial quiz attempt. Missed linked token child pipeline pattern (Q5), IDisposable wrapper cleanup pattern (Q6), and partial progress reporting requirements (Q8). Questions in learn/quiz09.md; answers in learn/quiz09_answers.md.
+
+11/14/2025
+- Step: quiz-retry
+- Id: 09
+- Status: completed
+- Result: 87.5% (7/8)
+- Topic: CancellationToken Integration & Graceful Shutdown
+- Summary: Passed retry quiz covering token passing to delegates and options, queued item processing after cancellation, linked token child pipeline patterns, graceful shutdown sequence, OCE handling in delegates, CTS disposal timing, partial result tracking patterns, and Post() behavior after cancellation. Missed Q7 - selected BD instead of ABCD for partial progress patterns (missed Interlocked counters and token checking). Questions in learn/quiz09.md; answers in learn/quiz09_answers.md.
+
+11/14/2025
+- Step: lab
+- Id: 09
 - Status: started
 - Topic: CancellationToken Integration & Graceful Shutdown
-- Summary: Comprehensive materials covering CancellationToken fundamentals, cancellation propagation patterns (block-level and pipeline-wide), three terminal states (Completed/Canceled/Faulted), graceful shutdown with two-phase pattern (Complete→timeout→Cancel), timeout patterns (fixed, sliding, linked), OperationCanceledException handling, resource cleanup patterns (IDisposable, completion callbacks), practical cancellable pipeline example, common pitfalls, best practices, and decision tree for choosing cancellation strategies. Materials saved to learn/learn09.md.
+- Lab: lab/iter09
+- Summary: Building cancellable file processor with thread-safe progress tracking (Interlocked counters), graceful two-phase shutdown with 5-second timeout, and proper cancellation token propagation to both block options and async operations. Three TODOs: N1 (thread-safe counters), N2 (graceful shutdown), N3 (token passing).
+

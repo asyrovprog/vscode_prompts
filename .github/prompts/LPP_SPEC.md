@@ -1,9 +1,5 @@
 # Literal Prompt Programming (LPP) Specification (Draft)
 
-Status: Draft
-Last-Updated: 2024-10-26
-Scope: Defines universal structure and semantics for LPP prompt modules. Domain-agnostic.
-
 ## 1. Core Concepts
 
 Prompt Module: Single text file containing: front-matter metadata, goal, optional imports, optional prompt function declarations, instructions (runnable prompt), optional command mapping, optional kernel spec.
@@ -23,7 +19,7 @@ There are two module types:
 1. Runnable Module (default): provides executable workflow logic, this module contains top-level execution instructions.
 2. Library Module: provides only prompt function definitions; has no top-level execution instructions.
 
-### 2.1 Runnable Module Required Order (normative):
+### 2.1 Runnable Module Required Order (normative)
 
 1. Front-Matter block
 2. `# Goal`
@@ -33,9 +29,9 @@ Optional sections:
 
 - Imports (`# Include Instructions From` or `# Referenced Instructions`)
 - Prompt Functions (`# Prompt Functions`)
-- Command Mapping (`# Command Mapping` or “Response command handling”)
+- Command Mapping (`# Command Mapping` or "Response command handling")
 
-### 2.2 Library Module Required Order (normative):
+### 2.2 Library Module Required Order (normative)
 
 1. Front-Matter block
 2. `# Goal`
@@ -60,9 +56,9 @@ Header: `# Prompt Functions`
 
 Each listed function MUST include following required sections:
 
-- Name with optional parameters. Examples: 
-    - `## FOO()`
-    - `## SHOW($MESSAGE)`
+- Name with optional parameters. Examples:
+  - `## FOO()`
+  - `## SHOW($MESSAGE)`
 
 - `### Goal` – States intent boundary (what this module is for). This section does not contain procedural steps.
 
@@ -86,8 +82,4 @@ All user-exposed commands referenced in instructions MUST appear here. No duplic
 ## 8. Variables
 
 Syntax: `$IDENTIFIER`
-Prompt program variable. Global unless explicitly specified as local. SHOULD avoid silent mutation—any mutation is an explicit instruction step.
-
----
-End of LPP Specification
-
+Prompt program variable. Global unless explicitly specified as local. SHOULD avoid silent mutation—any mutation is an explicit instruction step

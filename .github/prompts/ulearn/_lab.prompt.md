@@ -1,8 +1,8 @@
 ---
 mode: agent
 description: Learning `lab` workflow step function
-model: GPT-5 (copilot)
-tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
+model: Claude Sonnet 4.5 (copilot)
+tools: ['search/codebase', 'new', 'edit/editFiles', 'runCommands', 'fetch', 'ms-vscode.vscode-websearchforcopilot/websearch']
 ---
 
 # Initialization

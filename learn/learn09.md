@@ -113,15 +113,32 @@ graph TD
 
 ### Checking State
 
-```csharp
-await block.Completion;
+`await block.Completion` throws if the block is faulted or canceled, so you need either a `try/catch` or a status check *before* awaiting. Two common patterns:
 
-if (block.Completion.IsCompletedSuccessfully)
+```csharp
+// 1) Await and handle terminal states via try/catch
+try
+{
+    await block.Completion;
     Console.WriteLine("✓ All items processed");
-else if (block.Completion.IsCanceled)
+}
+catch (OperationCanceledException)
+{
     Console.WriteLine("⚠ Canceled - partial completion");
-else if (block.Completion.IsFaulted)
-    Console.WriteLine("✗ Faulted - " + block.Completion.Exception?.Message);
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"✗ Faulted - {ex.Message}");
+}
+
+// 2) Inspect Task status first (no exceptions thrown)
+var completion = block.Completion;
+if (completion.IsCompletedSuccessfully)
+    Console.WriteLine("✓ All items processed");
+else if (completion.IsCanceled)
+    Console.WriteLine("⚠ Canceled - partial completion");
+else if (completion.IsFaulted)
+    Console.WriteLine("✗ Faulted - " + completion.Exception?.Message);
 ```
 
 ---
@@ -131,6 +148,7 @@ else if (block.Completion.IsFaulted)
 ### The Challenge
 
 When canceling, you want to:
+
 1. Stop accepting new items immediately
 2. Process items already in the pipeline
 3. Clean up resources properly
@@ -195,6 +213,7 @@ public class GracefulProcessor
 ```
 
 **Shutdown Flow:**
+
 ```mermaid
 sequenceDiagram
     participant User
@@ -603,6 +622,7 @@ graph TD
 ## Exercise Challenge
 
 Build a **Cancellable Image Processor** that:
+
 1. Accepts image file paths
 2. Processes images (resize, compress)
 3. Saves results to output directory
@@ -611,6 +631,7 @@ Build a **Cancellable Image Processor** that:
 6. Reports how many images were completed vs canceled
 
 **Requirements:**
+
 - Use `TransformBlock` for processing
 - Use `ActionBlock` for saving
 - Pass `CancellationToken` to both blocks

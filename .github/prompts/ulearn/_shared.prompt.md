@@ -1,7 +1,8 @@
 ---
 mode: agent
+model: Claude Sonnet 4.5 (copilot)
 description: Learning `topic` workflow step function
-tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
+tools: ['search/codebase', 'new', 'edit/editFiles', 'runCommands', 'fetch', 'ms-vscode.vscode-websearchforcopilot/websearch']
 ---
 # Initialization
 Load, read and understand .github/prompts/lpp_spec.md
@@ -55,12 +56,14 @@ Persist a log entry of the current learning workflow step status and optional re
 - if `learnlog.md` does not exist, create it
 - Record current step name and it's status. Status can be `started` or `completed`. Step name could be `learn`, `quiz`, `lab`, `topic`
 - Add $TOPIC
+- Add iteration Id
 - Provide completion results if applicable. For instance, for quiz it could be: 80%
 
 - Example `learnlog.md`:
 ```
 10/22/2025
 - Step: quiz
+- Id: 06
 - Status: completed
 - Result: 80%
 - Topic: TCP/IP
@@ -68,6 +71,7 @@ Persist a log entry of the current learning workflow step status and optional re
 10/22/2025
 - Step: lab
 - Status: completed
+- Id: 01
 - Lab: lab/iter01
 ```
 <!-- Library Module: no top-level Instructions (per LPP spec) -->

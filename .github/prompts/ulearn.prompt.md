@@ -2,7 +2,7 @@
 mode: agent
 model: Claude Sonnet 4.5 (copilot)
 description: Learning iteration main entry point
-tools: ['search/codebase','search','new','edit/editFiles','runCommands','runTasks','problems','changes','vscodeAPI','openSimpleBrowser','fetch','githubRepo','extensions']
+tools: ['search/codebase', 'new', 'edit/editFiles', 'runCommands', 'fetch', 'ms-vscode.vscode-websearchforcopilot/websearch']
 ---
 
 # Initialization
