@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -17,6 +18,9 @@ public class FileProcessor
     // TODO[N1]: Add thread-safe counters for tracking progress
     // [YOUR CODE GOES HERE]
     // Add three int fields: _processedCount, _skippedCount, _failedCount
+    private int _processedCount;
+    private int _skippedCount;
+    private int _failedCount;
     
     public FileProcessor()
     {
@@ -27,7 +31,8 @@ public class FileProcessor
             ProcessFileAsync,
             new ExecutionDataflowBlockOptions
             {
-                MaxDegreeOfParallelism = 3
+                MaxDegreeOfParallelism = 3,
+                CancellationToken = _cts.Token
             });
     }
     
@@ -42,16 +47,33 @@ public class FileProcessor
         
         // TODO[N3]: Pass CancellationToken to async operations
         // [YOUR CODE GOES HERE]
+
+        if (_cts.Token.IsCancellationRequested)
+        {
+            Interlocked.Increment(ref _skippedCount);
+            return;
+        }
+
         // Pass _cts.Token to File.ReadAllTextAsync and Task.Delay
-        var content = await File.ReadAllTextAsync(filePath);
-        
-        // Simulate processing
-        await Task.Delay(50);
-        
-        // Count words
-        var wordCount = content.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
-        
-        throw new NotImplementedException("TODO[N1]: Track processed/skipped/failed counts with Interlocked");
+        try
+        {
+            var content = await File.ReadAllTextAsync(filePath, _cts.Token).ConfigureAwait(false);
+            
+            // Simulate processing
+            await Task.Delay(50, _cts.Token).ConfigureAwait(false);
+            
+            // Count words
+            var wordCount = content.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
+            Interlocked.Increment(ref _processedCount);
+        }
+        catch (OperationCanceledException)
+        {
+            Interlocked.Increment(ref _skippedCount);
+        }
+        catch
+        {
+            Interlocked.Increment(ref _failedCount);
+        }
     }
     
     public bool Post(string filePath) => _block.Post(filePath);
@@ -66,14 +88,41 @@ public class FileProcessor
     // Return true if graceful completion succeeded, false if forced cancellation was needed
     public async Task<bool> ShutdownAsync()
     {
-        throw new NotImplementedException("TODO[N2]: Implement graceful shutdown with timeout - see README section 'TODO N2 – Implement Graceful Shutdown with Timeout'");
+        _block.Complete();
+
+        try
+        {
+            await _block.Completion.WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
+            return true;
+        }
+        catch (OperationCanceledException)
+        {
+            // Block was already canceled before we called Complete()
+            return false;
+        }
+        catch (TimeoutException)
+        {
+            _cts.Cancel();
+            
+            try
+            {
+                await _block.Completion.ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected during forced cancellation
+            }
+            
+            return false;
+        }
     }
     
     // TODO[N1]: Implement GetStats to return current counts
     // [YOUR CODE GOES HERE]
     // Return a ProcessingStats record with current counts
-    public ProcessingStats GetStats()
-    {
-        throw new NotImplementedException("TODO[N1]: Return ProcessingStats - see README section 'TODO N1 – Implement Thread-Safe Progress Tracking'");
-    }
+    public ProcessingStats GetStats() => new ProcessingStats(
+        this._processedCount, 
+        this._skippedCount, 
+        this._failedCount, 
+        this._processedCount + this._skippedCount + this._failedCount);
 }

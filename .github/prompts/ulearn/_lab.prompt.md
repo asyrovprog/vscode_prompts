@@ -26,7 +26,7 @@ Load, read and understand .github/prompts/lpp_spec.md
 
 # Command Mapping
 - prev - EXECUTE_PROMPT($DIR/_quiz.prompt.md)
-- check - run lab tests and report success/failure. DO NOT fix code if tests fail/
+- check - run lab tests (but do not fix any compilation, runtime or test failure) and only report success/failure.
 - next - EXECUTE_PROMPT($DIR/_topic.prompt.md)
 - explain - ask for where help is needed and provide hints tied to TODOs
 

@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/lab/iter05/bin/Debug/net9.0/Lab.Iter05.dll",
+            "program": "${workspaceFolder}/lab/iter09/bin/Debug/net9.0/Lab.Iter09.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/lab/iter05",
+            "cwd": "${workspaceFolder}/lab/iter09",
             "console": "internalConsole",
             "stopAtEntry": false
         },

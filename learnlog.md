@@ -327,3 +327,43 @@
 - Lab: lab/iter09
 - Summary: Building cancellable file processor with thread-safe progress tracking (Interlocked counters), graceful two-phase shutdown with 5-second timeout, and proper cancellation token propagation to both block options and async operations. Three TODOs: N1 (thread-safe counters), N2 (graceful shutdown), N3 (token passing).
 
+11/25/2025
+- Step: lab
+- Id: 09
+- Status: completed
+- Topic: CancellationToken Integration & Graceful Shutdown
+- Lab: lab/iter09
+- Result: Tests passing (dotnet run)
+- Summary: Completed Cancellable File Processor implementing thread-safe progress tracking with Interlocked operations (_processedCount, _skippedCount, _failedCount), graceful two-phase shutdown with 5-second timeout (Complete() → WaitAsync → Cancel on timeout), CancellationToken propagation to both block options and async operations (File.ReadAllTextAsync, Task.Delay), early cancellation detection with IsCancellationRequested, and proper OperationCanceledException handling. Successfully demonstrated 4/4 tests: graceful shutdown, immediate cancellation, partial processing with accurate counts, and thread-safe parallel counter updates.
+
+11/25/2025
+- Step: topic
+- Id: 10
+- Status: completed
+- Topic: Custom IPropagatorBlock Implementation
+- Summary: Selected advanced topic covering building dataflow blocks from scratch without Encapsulate, implementing ISourceBlock and ITargetBlock interfaces directly, understanding message reservation and consumption protocol, custom block lifecycle management, and knowing when to build custom implementations versus using DataflowBlock.Encapsulate.
+
+11/25/2025
+- Step: learn
+- Id: 10
+- Status: completed
+- Topic: Custom IPropagatorBlock Implementation
+- Summary: Created comprehensive materials covering interface hierarchy (IPropagatorBlock combining ITargetBlock and ISourceBlock), OfferMessage implementation with DataflowMessageStatus return values (Declined vs Postponed patterns), message reservation protocol for non-greedy scenarios with two-phase commit pattern (Reserve/Consume/Release), LinkTo mechanics, thread-safety patterns, completion propagation, minimal pass-through block example, rate-limiting block implementation, testing strategies, common mistakes (holding locks during async, missing header validation, premature completion), PropagateMessages retry limitation, reservation expiration concerns, and when to build custom vs use Encapsulate. Materials saved to learn/learn10.md.
+
+11/25/2025
+- Step: quiz
+- Id: 10
+- Status: completed
+- Result: 70% (7/10)
+- Topic: Custom IPropagatorBlock Implementation
+- Summary: Passed quiz with 70% covering interface implementation (ABC correct), DataflowMessageStatus semantics (Declined vs Postponed), reservation protocol for atomic coordination, consumeToAccept handling, no reservation expiration, PropagateMessages retry limitations. Missed Q8 (lock deadlock risk vs performance - selected A instead of B), Q9 (custom scenarios - missed reservation protocol option C), Q10 (completion requires buffer drain - selected B immediate flag instead of C drain buffer). Questions in learn/quiz10.md; answers in learn/quiz10_answers.md.
+
+11/25/2025
+- Step: lab
+- Id: 10
+- Status: started
+- Topic: Custom IPropagatorBlock Implementation
+- Lab: lab/iter10
+- TODOs: 3 (N1: OfferMessage with priority storage, N2: PropagateMessages priority-first sending, N3: Complete/Fault/CheckCompletion lifecycle)
+- Summary: Implementing PriorityBufferBlock<T> accepting (Priority, Value) tuples and propagating highest priority first with FIFO within same priority. Block buffers messages in SortedSet and drains on Complete() rather than immediate propagation. Reference solution with hints available in lab/iter10/REF.md.
+
