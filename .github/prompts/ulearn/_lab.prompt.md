@@ -23,6 +23,7 @@ Load, read and understand .github/prompts/lpp_spec.md
     - Propose 2-3 high level lab concept options and ask user to choose.
     - Execute IMPLEMENT_LAB(); if it returns FAILURE (too complex or poorly designed) propose alternative concepts and retry once; on second FAILURE execute EXECUTE_HALT().
 - Execute EXECUTE_WRITE_LOG(...) to create lab log record with $TOPIC and mark lab started.
+- Ask user to complete lab $LAB_ID
 
 # Command Mapping
 - prev - EXECUTE_PROMPT($DIR/_quiz.prompt.md)
@@ -57,6 +58,7 @@ Load, read and understand .github/prompts/lpp_spec.md
     - Define IDs N1, N2 (optional N3) each with a short title and learning objective.
 - Scaffold:
     - Create `lab/iterNN/` (increment NN).
+    - Set global variable $LAB_ID to value of NN
     - Add `README.md` with a section per TODO (title format: "TODO N1 – <title>").
     - Copy instructions for each TODO under each corresponding [YOUR CODE GOES HERE] for easy access.
     - Add task file (`Task.cs` for C# or `task.py` for Python) containing stub blocks:

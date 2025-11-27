@@ -59,23 +59,53 @@ public class PriorityBufferBlock<T> : IPropagatorBlock<(int Priority, T Value), 
         //
         // Requirements:
         // 1. Validate messageHeader.IsValid (throw ArgumentException if invalid)
+        if (!messageHeader.IsValid)
+        {
+            throw new ArgumentException();
+        }
+
         // 2. Check _decliningPermanently flag under lock
         //    - Return DataflowMessageStatus.DecliningPermanently if true
+        if (_decliningPermanently)
+        {
+            return DataflowMessageStatus.DecliningPermanently;
+        }
+
         // 3. Handle consumeToAccept protocol:
         //    - If consumeToAccept && source != null:
         //      * Call source.ConsumeMessage(messageHeader, this, out bool consumed)
         //      * Assign result to messageValue
         //      * Return DataflowMessageStatus.NotAvailable if !consumed
+        if (consumeToAccept)
+        {
+            if (source == null)
+            {
+                return DataflowMessageStatus.NotAvailable;
+            }
+            
+            var value = source.ConsumeMessage(messageHeader, this, out var consumed);
+            if (!consumed)
+            {
+                return DataflowMessageStatus.NotAvailable;
+            }
+
+            messageValue = value;
+        }
+
         // 4. Create PriorityMessage<T> with:
         //    - messageValue.Priority
         //    - messageValue.Value
         //    - _sequenceNumber++ (increment for FIFO within same priority)
+        _sequenceNumber++;
+        var message = new PriorityMessage<T>(messageValue.Priority, messageValue.Value, _sequenceNumber);
+
         // 5. Add to _priorityBuffer under lock
+        _priorityBuffer.Add(message);
+
         // 6. Return DataflowMessageStatus.Accepted
-        //
         // See REF.md for detailed hints.
-        
-        throw new NotImplementedException("TODO[N1] - see README section 'TODO N1 – Implement OfferMessage with Priority Storage'");
+       
+        return DataflowMessageStatus.Accepted;
     }
 
     // === ISourceBlock Implementation ===
@@ -123,11 +153,12 @@ public class PriorityBufferBlock<T> : IPropagatorBlock<(int Priority, T Value), 
         //
         // Requirements:
         // 1. Set _decliningPermanently = true under lock
+        _decliningPermanently = true;
         // 2. Call PropagateMessages() to drain buffer
+        PropagateMessages();
+
         //
         // See REF.md for detailed hints.
-        
-        throw new NotImplementedException("TODO[N3] - see README section 'TODO N3 – Implement Complete, Fault, and CheckCompletion'");
     }
 
     public void Fault(Exception exception)
@@ -157,19 +188,44 @@ public class PriorityBufferBlock<T> : IPropagatorBlock<(int Priority, T Value), 
         //
         // Requirements:
         // 1. Use while(true) loop to process all messages
-        // 2. Get highest priority message (_priorityBuffer.First()) under lock
-        //    - Break if buffer empty
-        // 3. Copy _targets to array under lock
-        // 4. Loop through targets and offer message:
-        //    - Create unique header with Interlocked.Increment(ref _nextMessageId)
-        //    - Call target.OfferMessage(header, messageToSend.Value, this, consumeToAccept: false)
-        //    - If Accepted: remove from buffer under lock, break inner loop
-        // 5. If no target accepted (offered == false), break outer loop
+        while (_priorityBuffer.Count > 0)
+        {
+            // 2. Get highest priority message (_priorityBuffer.First()) under lock
+            var next = _priorityBuffer.First();
+            if (next == null)
+            {
+                break;
+            }
+
+            // 3. Copy _targets to array under lock
+            var targets = _targets.ToArray();
+
+            // 4. Loop through targets and offer message:
+            //    - Create unique header with Interlocked.Increment(ref _nextMessageId)
+            //    - Call target.OfferMessage(header, messageToSend.Value, this, consumeToAccept: false)
+            //    - If Accepted: remove from buffer under lock, break inner loop
+            bool accepted = false;
+            foreach (var target in targets)
+            {
+                Interlocked.Increment(ref _nextMessageId);
+                var header = new DataflowMessageHeader(_nextMessageId);
+                if (target.OfferMessage(header, next.Value, this, false) == DataflowMessageStatus.Accepted)
+                {
+                    _priorityBuffer.Remove(next);
+                    accepted = true;
+                    break;
+                }
+            }
+
+            // 5. If no target accepted (offered == false), break outer loop
+            if (!accepted)
+            {
+                break;
+            }
+        }
+
         // 6. Call CheckCompletion() at end
-        //
-        // See REF.md for detailed hints.
-        
-        throw new NotImplementedException("TODO[N2] - see README section 'TODO N2 – Implement PropagateMessages for Priority Sending'");
+        CheckCompletion();
     }
 
     private void CheckCompletion()
@@ -180,14 +236,29 @@ public class PriorityBufferBlock<T> : IPropagatorBlock<(int Priority, T Value), 
         //
         // Requirements:
         // 1. Check if should complete: _decliningPermanently && _priorityBuffer.Count == 0
+        if (!_decliningPermanently || _priorityBuffer.Count != 0)
+        {
+            return;
+        }
+
         // 2. If shouldComplete && !_completion.Task.IsCompleted:
         //    - Call _completion.TrySetResult()
         //    - Copy _targets to array under lock
         //    - Call target.Complete() on each target
-        //
+        _ = _completion.TrySetResult();
+
+        ITargetBlock<T>[] targets;
+        lock (_lock)
+        {
+            targets = _targets.ToArray();
+        }
+
+        foreach (var target in targets)
+        {
+            target.Complete();
+        }
+
         // See REF.md for detailed hints.
-        
-        throw new NotImplementedException("TODO[N3] - see README section 'TODO N3 – Implement Complete, Fault, and CheckCompletion'");
     }
 
     private class Unlinker : IDisposable

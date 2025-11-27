@@ -1,3 +1,26 @@
+
+11/26/2025
+- Step: lab
+- Id: 11
+- Status: completed
+- Topic: Producer-Consumer Patterns Beyond Dataflow
+- Lab: lab/iter11
+- Result: Tests passing (4/4)
+- Summary: Completed rate-limited API request queue using System.Threading.Channels. Successfully implemented bounded channel with backpressure (FullMode.Wait), TryWrite/WriteAsync enqueue patterns with throttled counter tracking, SemaphoreSlim rate limiting (10 req/sec with fire-and-forget Release after 1s delay), consumer loop with await foreach over ReadAllAsync, thread-safe Interlocked statistics (_successCount, _failedCount, _throttledCount), graceful cancellation handling, and pending task completion tracking. Demonstrated producer-consumer patterns with resource constraints and proper async coordination.
+
+11/26/2025
+- Step: topic
+- Id: 12
+- Status: completed
+- Topic: Reactive Extensions (Rx.NET)
+- Summary: Selected topic covering Observable sequences and operators, hot vs cold observables, backpressure with Reactive, and combining Rx with async/await as next progression from dataflow and channel-based patterns.
+
+11/26/2025
+- Step: learn
+- Id: 12
+- Status: started
+- Topic: Reactive Extensions (Rx.NET)
+- Summary: Learning Rx.NET fundamentals including IObservable<T>/IObserver<T> interfaces (push-based dual of IEnumerable), creating observables (Return, Range, FromAsync, FromEventPattern, Create), subscribing with OnNext/OnError/OnCompleted, hot vs cold observables (unicast with new producer per subscriber vs multicast with shared producer), converting cold→hot with Publish()/Connect()/RefCount(), common operators (Where, Select, SelectMany, Scan, Throttle, Sample, Buffer, Merge, CombineLatest, Zip), backpressure strategies (throttle/sample drop, buffer batch, window nested), practical search autocomplete example, Rx vs async/await comparison, retry with exponential backoff, polling patterns, best practices (dispose subscriptions, use operators, Publish().RefCount() for sharing), and common pitfalls (multiple cold subscriptions, memory leaks, blocking in OnNext). Materials in learn/learn12.md.
 10/24/2025
 - Step: learn
 - Id: 01
@@ -366,4 +389,36 @@
 - Lab: lab/iter10
 - TODOs: 3 (N1: OfferMessage with priority storage, N2: PropagateMessages priority-first sending, N3: Complete/Fault/CheckCompletion lifecycle)
 - Summary: Implementing PriorityBufferBlock<T> accepting (Priority, Value) tuples and propagating highest priority first with FIFO within same priority. Block buffers messages in SortedSet and drains on Complete() rather than immediate propagation. Reference solution with hints available in lab/iter10/REF.md.
+
+11/26/2025
+- Step: lab
+- Id: 10
+- Status: completed
+- Topic: Custom IPropagatorBlock Implementation
+- Lab: lab/iter10
+- Result: Tests passing (4/4 - dotnet run)
+- Summary: Completed PriorityBufferBlock<T> implementing ISourceBlock and ITargetBlock interfaces. Successfully implemented OfferMessage with priority-based SortedSet storage using custom PriorityMessage comparer (priority descending, FIFO within priority), PropagateMessages draining buffer highest-priority-first with ConsumeMessage protocol, and Complete/Fault/CheckCompletion lifecycle with _decliningPermanently flag and TrySetResult/TrySetException for completion task. All tests passed: priority ordering (5→3→1), FIFO within same priority, completion after buffer drain, and declining new messages after Complete().
+
+11/26/2025
+- Step: topic
+- Id: 11
+- Status: completed
+- Topic: Producer-Consumer Patterns Beyond Dataflow
+- Summary: Selected topic covering System.Threading.Channels deep dive, comparing Channels vs Dataflow (when to use each), channel-based async streaming patterns, and backpressure strategies across different concurrency primitives.
+
+11/26/2025
+- Step: learn
+- Id: 11
+- Status: completed
+- Topic: Producer-Consumer Patterns Beyond Dataflow
+- Summary: Completed learning System.Threading.Channels fundamentals including bounded vs unbounded channels, reading/writing patterns (await foreach with ReadAllAsync, WaitToReadAsync, ReadAsync), completion signaling, Channels vs Dataflow comparison (storage vs storage+processing), performance characteristics (10x faster for simple producer-consumer), advanced patterns (multi-producer/consumer, fan-out broadcasting, async streaming with IAsyncEnumerable), backpressure strategies (bounded blocking, drop policies, TryWrite fallback, adaptive throttling), real-world log aggregator example with batch flushing, common pitfalls (forgetting Complete(), unbounded with slow consumer, not handling completion exceptions), and best practices (SingleReader/SingleWriter optimization, ValueTask usage, multi-producer completion coordination). Materials saved to learn/learn11.md.
+
+11/26/2025
+- Step: quiz
+- Id: 11
+- Status: completed
+- Result: 70% (7/10)
+- Topic: Producer-Consumer Patterns Beyond Dataflow
+- Summary: Passed quiz covering Channel architecture (shared queue between Writer/Reader), DropOldest ring buffer behavior (removes from front, adds to back), Channels vs Dataflow primary difference (storage vs storage+processing), ReadAllAsync best practice, completion signaling consequences, TryWrite vs WriteAsync usage, performance benefits (10x faster for simple scenarios), SingleReader optimization (lock-free algorithms, not enforcement), multi-producer completion coordination (Interlocked.Decrement pattern), and bounded vs unbounded tradeoffs. Missed Q5 (forgot unbounded memory leak with slow consumer - answered AC instead of ACD), Q8 (confused SingleReader as enforcement vs optimization hint - answered A instead of B), Q9 (thought each producer calls Complete() - correct answer uses Interlocked counter). Questions in learn/quiz11.md; answers in learn/quiz11_answers.md.
+
 

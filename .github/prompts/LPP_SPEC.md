@@ -62,7 +62,10 @@ Each listed function MUST include following required sections:
 
 - `### Goal` – States intent boundary (what this module is for). This section does not contain procedural steps.
 
-- `### Instructions` – Contains ordered imperative or control-flow statements which must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally. Steps MAY begin with a verb (Execute, Load, Validate, Ask, Set, Return) for clarity, but any single clear instruction is valid. Conditionals MUST be explicit ("If X then … else …").
+- `### Instructions` – Contains ordered imperative or control-flow statements which must be executed as program code: sequentially, without skipping steps, without reordering, without introducing new steps, and interpreting each instruction literally. Steps MAY begin with a verb (Execute, Load, Validate, Ask, Set, Return) for clarity, but any single clear instruction is valid. Conditionals MUST be explicit ("If X then … else …").
+
+Before execution of instructions block write to chat output: "Starting instructions for $PROMPT_NAME".
+After finishing execution block write to chat output "Finished instructions for $PROMPT_NAME".
 
 Optional Subsections:
 
@@ -71,7 +74,10 @@ Optional Subsections:
 ## 6. Instructions Section
 
 Header: `# Instructions` (exactly one per module).
-Contains ordered imperative or control-flow statements which must be executed as program code: sequentially, without skipping steps, without reordering, interpreting each instruction literally. Steps MAY begin with a verb (Execute, Load, Validate, Ask, Set, Return) for clarity, but any single clear instruction is valid. Conditionals MUST be explicit ("If X then … else …").
+Contains ordered imperative or control-flow statements which must be executed as program code: sequentially, without skipping steps, without reordering, without introducing new steps, interpreting each instruction literally. Steps MAY begin with a verb (Execute, Load, Validate, Ask, Set, Return) for clarity, but any single clear instruction is valid. Conditionals MUST be explicit ("If X then … else …").
+
+Before execution of instructions block write to chat output: "Starting instructions for $FUNCTION_NAME".
+After finishing execution block write to chat output "Finished instructions for $FUNCTION_NAME".
 
 ## 7. Command Mapping
 
