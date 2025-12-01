@@ -54,16 +54,18 @@ Persist a log entry of the current learning workflow step status and optional re
 
 ### Instructions
 - if `learnlog.md` does not exist, create it
+- If you can find current step with the same Id than just update it, otherwise create new log entry.
 - Record current step name and it's status. Status can be `started` or `completed`. Step name could be `learn`, `quiz`, `lab`, `topic`
 - Add $TOPIC
 - Add iteration Id
 - Provide completion results if applicable. For instance, for quiz it could be: 80%
+- Verify that all log entries are ordered by date and then by Id. If order is not correct fix it.
 
-- Example `learnlog.md`:
+- Example `learnlog.md` (partial):
 ```
 10/22/2025
 - Step: quiz
-- Id: 06
+- Id: 02
 - Status: completed
 - Result: 80%
 - Topic: TCP/IP
@@ -71,7 +73,7 @@ Persist a log entry of the current learning workflow step status and optional re
 10/22/2025
 - Step: lab
 - Status: completed
-- Id: 01
-- Lab: lab/iter01
+- Id: 02
+- Lab: lab/iter02
 ```
 <!-- Library Module: no top-level Instructions (per LPP spec) -->

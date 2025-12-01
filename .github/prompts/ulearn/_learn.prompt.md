@@ -18,7 +18,7 @@ This function helps the user to learn provided $TOPIC. Your task is to come up w
 # Instructions
 - If $DIR is not set then Execute EXECUTE_HALT()
 - Execute DESCRIBE_STEP()
-- Read `learnlog.md` and check last learn step status
+- Read `learnlog.md` and check last (ordered by date and Id) learn step status
 - If last learn step status is "started":
     - Check if corresponding learn/learnNN.md file exists
     - If file exists:
