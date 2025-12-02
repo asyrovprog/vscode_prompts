@@ -52,20 +52,31 @@ Load another prompt module and execute its instructions verbatim.
 ### Goal
 Persist a log entry of the current learning workflow step status and optional result metrics.
 
+### Constraints
+- All log entries must be ordered chronologically (oldest date first, newest date last). Within the same date, order by Id (lowest Id first, highest Id last) and then by step name (`learn` then `quiz` then `lab`).
+- There may be only one entry for each Id and step name. 
+
 ### Instructions
 - if `learnlog.md` does not exist, create it
-- If you can find current step with the same Id than just update it, otherwise create new log entry.
-- Record current step name and it's status. Status can be `started` or `completed`. Step name could be `learn`, `quiz`, `lab`, `topic`
+- If you can find current step with the same Id then just update it, otherwise create new log entry.
+- Record current step name and it's status. Status can be `started` or `completed`. Step name could be `learn`, `quiz`, `lab`.
 - Add $TOPIC
 - Add iteration Id
 - Provide completion results if applicable. For instance, for quiz it could be: 80%
-- Verify that all log entries are ordered by date and then by Id. If order is not correct fix it.
+- Verify and fix constraints.
 
-- Example `learnlog.md` (partial):
+### Example `learnlog.md` (partial):
 ```
+10/21/2025
+- Step: learn
+- Id: 01
+- Status: completed
+- Result: 80%
+- Topic: TCP/IP
+
 10/22/2025
 - Step: quiz
-- Id: 02
+- Id: 01
 - Status: completed
 - Result: 80%
 - Topic: TCP/IP
@@ -73,7 +84,15 @@ Persist a log entry of the current learning workflow step status and optional re
 10/22/2025
 - Step: lab
 - Status: completed
-- Id: 02
+- Id: 01
 - Lab: lab/iter02
+- Topic: TCP/IP
+
+10/22/2025
+- Step: learn
+- Id: 02
+- Status: started
+- Topic: OSI model
 ```
+
 <!-- Library Module: no top-level Instructions (per LPP spec) -->
