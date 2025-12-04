@@ -15,6 +15,9 @@ This function helps the user to learn provided $TOPIC. Your task is to come up w
 # Include Instructions From
 - $DIR/_shared.prompt.md
 
+# Constraints
+- Do not copy-paste learning materials from previous learning iterations.
+
 # Instructions
 - If $DIR is not set then Execute EXECUTE_HALT()
 - Execute DESCRIBE_STEP()

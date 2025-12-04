@@ -92,6 +92,9 @@ Load, read and understand .github/prompts/lpp_spec.md
         // or python full passing code
         </details>
         ```
+- Registration:        
+    - If using C# then add project to *.sln file in root folder
+    - Update launch.json so the user can run and debug this lab in visual studio code
 - Validation:
     - Verify required files exist: `README.md`, `REF.md`, task file, harness.
     - Public test run: failures contain both TODO ID and matching README section title.
