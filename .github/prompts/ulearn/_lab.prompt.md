@@ -49,6 +49,7 @@ Load, read and understand .github/prompts/lpp_spec.md
 - "Never auto-complete TODOs" applies only after private verification (public form); private completion is required.
 - Up to 3 private attempts to achieve all PASSing tests; otherwise delete iteration folder and return FAILURE.
 - Tests should be deterministic (seed any randomness).
+- Test should be fully automated, and so should not ask for user inputs.
 
 ### Instructions
 - Concept Design:

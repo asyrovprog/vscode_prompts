@@ -84,7 +84,8 @@ After finishing execution block write to chat output "Finished instructions for 
 Header: `# Command Mapping` (or “Response command handling”).
 Format each line: `- <command> - <instructions>`
 All user-exposed commands referenced in instructions MUST appear here. No duplicate command tokens.
-Command can only be triggered by the user. Once and only when `<command>` is recelived then `<instructions>` should be executed.
+Command can only be triggered by the user. Once and only when `<command>` is recelived then `<instructions>` should be executed. _Do not_ execute any `<instruction>` until you received `<command>` from user explicitly.
+
 
 ## 8. Variables
 
