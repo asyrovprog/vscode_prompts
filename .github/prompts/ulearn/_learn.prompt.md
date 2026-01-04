@@ -19,7 +19,6 @@ This function helps the user to learn provided $TOPIC. Your task is to come up w
 - Do not copy-paste learning materials from previous learning iterations.
 
 # Instructions
-- If $DIR is not set then Execute EXECUTE_HALT()
 - Execute DESCRIBE_STEP()
 - Read `learnlog.md` and check last (ordered by date and Id) learn step status
 - If last learn step status is "started":

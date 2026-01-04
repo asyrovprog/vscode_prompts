@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: Claude Sonnet 4.5 (copilot)
+model: GPT-5.1-Codex-Max (copilot)
 description: Learning iteration main entry point
 tools: ['search/codebase', 'new', 'edit/editFiles', 'runCommands', 'fetch', 'ms-vscode.vscode-websearchforcopilot/websearch']
 ---
@@ -15,7 +15,7 @@ Learning iteration main entry point. It decides what next prompt should be execu
 - .github/prompts/ulearn/_shared.prompt.md
 
 # Instructions
-- Set $DIR = .github/prompts/ulearn  // Base directory for ulearn step prompt modules
+- Set $DIR = .github/prompts/ulearn
 - Check if `learnlog.md` is provided, if yes then do EXECUTE_PROMPT for:
     - $DIR/_lab.prompt.md if:
         - last recorded checkpoint is lab and this lab is not completed

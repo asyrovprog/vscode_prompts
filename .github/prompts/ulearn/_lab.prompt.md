@@ -16,7 +16,6 @@ Load, read and understand .github/prompts/lpp_spec.md
 
 # Instructions
 - Execute DESCRIBE_STEP()
-- If $DIR is not set then Execute EXECUTE_HALT() (dispatcher must define base directory)
 - Ensure `lab/` exists; if not then ask user what language should be used (C# or Python) then create directory.
 - Verify if any labs are marked unfinished in `learnlog.md`; if so ask user to complete those first and Execute EXECUTE_HALT().
 - Otherwise:

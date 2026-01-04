@@ -15,7 +15,6 @@ This function helps the user to evaluate knowledge of provided so far materials 
 - $DIR/_shared.prompt.md
 
 # Instructions
-- If $DIR is not set then Execute EXECUTE_HALT() (dispatcher must define base directory)
 - Execute DESCRIBE_STEP()
 - Read `learnlog.md` and check last quiz step status
 - If last quiz step status is "started":

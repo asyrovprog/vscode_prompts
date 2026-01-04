@@ -47,8 +47,9 @@ Purpose: States intent boundary (what this module is for). This section does not
 ## 4. Imports
 
 Header: `# Include Instructions From` (or `# Referenced Instructions`)
-Each line: `- relative/path/to/other.prompt.md`
-All paths MUST exist. Imports are declarative; execution only happens via explicit function or macro calls inside `# Instructions`.
+Each line: `- path/to/other.prompt.md`
+All paths MUST exist and MUST be relative to the workspace root. Imports are declarative; execution only happens via explicit function or macro calls inside `# Instructions`.
+If imported file does not exists you must report this critical / fatal error to the user and stop execution of the prompt.
 
 ## 5. Prompt Functions Section
 
@@ -74,7 +75,7 @@ Optional Subsections:
 ## 6. Instructions Section
 
 Header: `# Instructions` (exactly one per module).
-Contains ordered imperative or control-flow statements which must be executed as program code: sequentially, without skipping steps, without reordering, without introducing new steps, interpreting each instruction literally. Steps MAY begin with a verb (Execute, Load, Validate, Ask, Set, Return) for clarity, but any single clear instruction is valid. Conditionals MUST be explicit ("If X then … else …").
+Contains ordered imperative or control-flow statements which must be executed as program code: sequentially, without skipping steps, without reordering, without introducing new steps, and interpreting each instruction literally. Steps MAY begin with a verb (Execute, Load, Validate, Ask, Set, Return) for clarity, but any single clear instruction is valid. Conditionals MUST be explicit ("If X then … else …"). If an instruction calls a Prompt Function that is not defined in the module or its imports, you must report this as a critical / fatal error and stop execution.
 
 Before execution of instructions block write to chat output: "Starting instructions for $FUNCTION_NAME".
 After finishing execution block write to chat output "Finished instructions for $FUNCTION_NAME".
@@ -91,3 +92,8 @@ Command can only be triggered by the user. Once and only when `<command>` is rec
 
 Syntax: `$IDENTIFIER`
 Prompt program variable. Global unless explicitly specified as local. SHOULD avoid silent mutation—any mutation is an explicit instruction step
+
+## 9. Initialization Section
+
+Header: `# Initialization`
+Purpose: Contains setup instructions that must run before any other logic. This section is for loading dependencies, setting initial variables, or other bootstrapping tasks.
