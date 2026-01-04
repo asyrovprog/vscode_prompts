@@ -1,72 +1,89 @@
-# vscode_prompts
+# Ulearn Prompt
 
-A GitHub Copilot Chat **learning prompt** for VS Code.
+VS Code GitHub Copilot Chat slash prompt I use for an iterative, top-down study loop:
 
-It uses an iterative top-down loop:
-**select a topic → learn → quiz → lab → repeat**.
+**topic -> learn -> quiz -> lab -> repeat**.
 
-## Who it’s for
+## Who it's for
 
-Software developers who want a lightweight, structured way to learn a topic and then immediately practice it.
+Software developers who want a lightweight, hands-on, structured way to learn a topic and practice it, as opposed to passive learning from videos and docs. I built it for myself and share it for anyone who wants the same kind of loop.
 
-## How it works
+## Why it helps
 
-- **Select a topic:** either provide your own topic or pick from suggestions.
+What I like about it:
+
+- **Focused loop:** time-boxed learning, quizzing, and practice keep momentum.
+- **Resumable:** progress is tracked in `learnlog.md`.
+- **Artifacts:** notes/quizzes under `learn/`, exercises under `lab/`.
+- **Adaptable:** adjust depth, difficulty, or format at any step.
+
+## Prerequisites
+
+- VS Code with GitHub Copilot Chat enabled.
+- Prompt files support in VS Code (the `.github/prompts` feature).
+
+## How this learning works
+
+The loop is simple:
+
+- **Select a subtopic:** based on the learning log.
 - **Learn (~20 minutes):** Copilot generates a compact, top-down set of learning materials.
-- **Quiz (6–10 questions):** Copilot checks understanding and scores you.
-- **Lab (~25–30 minutes):** Copilot generates a LeetCode-style programming assignment to practice the same topic.
-- **Repeat:** Pick the next topic (to go deeper) and run another iteration.
+- **Quiz (6-10 questions):** Copilot checks understanding and scores you.
+- **Lab (~25-30 minutes):** Copilot generates a LeetCode-style programming assignment to practice the same topic.
+- **Repeat:** pick the next topic and run another iteration.
 
-The prompt behaves like a wizard: each step prints available commands. When you finish a step (such as read learning materials or answered quiz questions), type `next` to mark it complete and move on.
+Each step prints available commands. When you finish a step (such as reading learning materials or answering quiz questions), type `next` to mark it complete and move on. You can stop anytime and resume from `learnlog.md`.
 
-The prompt maintains a `learnlog.md` so you can stop anytime and resume from where you left off.
+## Quickstart
 
-## Under the hood
+This is how I run it:
 
-This is implemented as a small set of VS Code “prompt files” under `.github/prompts`. The `/ulearn ...` command runs a dispatcher prompt that looks at `learnlog.md` to determine which step you’re currently in (topic, learn, quiz, or lab) and then routes execution to the corresponding step prompt.
-
-Each step prompt generates (or reuses) files in your workspace (for example, notes/quizzes under `learn/` and coding exercises under `lab/`) and updates `learnlog.md` as you progress. That’s what makes the flow resumable: if you close VS Code and come back later, rerunning simply as `/ulearn` can continue from the last recorded step.
-
-## Recommended VS Code / Copilot setup
-
-- Enable the tool `ms-vscode.vscode-websearchforcopilot/websearch` so learning materials can be kept up to date and include external references.
-  - Reference (setup + API key + settings): <https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-websearchforcopilot> (see `websearch.useSearchResultsDirectly`).
-- For faster generation, you can configure VS Code/Copilot auto-approve for agent actions (edits/commands). Only do this if you trust the prompt.
-  - Reference: <https://code.visualstudio.com/docs/copilot/chat/chat-tools> (see “Automatically approve terminal commands” and the tool approval sections). Useful settings include `chat.tools.terminal.autoApprove` (terminal commands) and `chat.tools.urls.autoApprove` (URL/web tools, including web search).
-
-## Setup
-
-1. Clone this repo:
+macOS/Linux:
 
 ```bash
 git clone https://github.com/asyrovprog/vscode_prompts.git
 cd vscode_prompts
-```
-
-1. Create a separate folder where your learning artifacts will live:
-
-```bash
 mkdir -p ~/learning
-```
-
-1. Symlink this repo’s `.github` into that learning folder:
-
-```bash
 ln -s "$PWD/.github" ~/learning/.github
-```
-
-1. Open the learning folder in VS Code:
-
-```bash
 code ~/learning
 ```
 
-## Run
+Windows (PowerShell, Developer Mode enabled):
 
-Open Copilot Chat in VS Code and start the workflow:
+```powershell
+git clone https://github.com/asyrovprog/vscode_prompts.git
+cd vscode_prompts
+mkdir "$HOME\\learning"
+New-Item -ItemType SymbolicLink -Path "$HOME\\learning\\.github" -Target "$PWD\\.github"
+code "$HOME\\learning"
+```
 
-`/ulearn I want to learn <topic>`
+Then in Copilot Chat run `/ulearn I want to learn <topic>`. If `learnlog.md` already exists, run `/ulearn` to resume.
 
 Example:
 
-`/ulearn I want to learn A* search`
+`/ulearn I want to learn Semantic Kernel`
+
+## Setup notes
+
+- I keep a separate workspace folder (for example, `~/learning`) so generated `learn/`, `lab/`, and `learnlog.md` stay out of the prompt repo.
+- Symlink this repo's `.github` into that folder so VS Code picks up the prompts.
+- On Windows, use WSL or enable Developer Mode to create symlinks.
+
+## Under the hood
+
+Prompts live under `.github/prompts`. The `/ulearn` command dispatches to step prompts based on `learnlog.md`.
+Each step writes or reuses files in your workspace and updates `learnlog.md`, which makes the flow resumable.
+
+## Author notes
+
+Copilot can be chatty and interrupt the flow, so I sometimes use YOLO (You Only Live Once) mode with 5 seconds auto-approve. Caution: auto-approve is risky; use it only for trusted repos and disable it when you're done.
+
+Useful settings: `chat.tools.terminal.autoApprove`, `chat.tools.urls.autoApprove`. See "Automatically approve terminal commands": <https://code.visualstudio.com/docs/copilot/chat/chat-tools>.
+
+I also enable the web search tool so learning materials can include external references: <https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-websearchforcopilot> (see `websearch.useSearchResultsDirectly`).
+
+## References
+
+- https://code.visualstudio.com/docs/copilot/chat/chat-tools
+- https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-websearchforcopilot
