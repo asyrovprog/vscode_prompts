@@ -14,9 +14,16 @@ Software developers who want a lightweight, structured way to learn a topic and 
 - **Learn (~20 minutes):** Copilot generates a compact, top-down set of learning materials.
 - **Quiz (6–10 questions):** Copilot checks understanding and scores you.
 - **Lab (~25–30 minutes):** Copilot generates a LeetCode-style programming assignment to practice the same topic.
-- **Repeat:** Pick the next topic (or go deeper) and run another iteration.
+- **Repeat:** Pick the next topic (to go deeper) and run another iteration.
 
 The prompt maintains a `learnlog.md` so you can stop anytime and resume from where you left off.
+
+## Recommended VS Code / Copilot setup
+
+- Enable the tool `ms-vscode.vscode-websearchforcopilot/websearch` so learning materials can be kept up to date and include external references.
+  - Reference (setup + API key + settings): <https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-websearchforcopilot> (see `websearch.useSearchResultsDirectly`).
+- For faster generation, you can configure VS Code/Copilot auto-approve for agent actions (edits/commands). Only do this if you trust the prompt.
+  - Reference: <https://code.visualstudio.com/docs/copilot/chat/chat-tools> (see “Automatically approve terminal commands” and the tool approval sections). Useful settings include `chat.tools.terminal.autoApprove` (terminal commands) and `chat.tools.urls.autoApprove` (URL/web tools, including web search).
 
 ## Setup
 
