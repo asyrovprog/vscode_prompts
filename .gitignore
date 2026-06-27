@@ -1,0 +1,7 @@
+# Generated learning artifacts (belong in the learner's working directory,
+# never committed to this plugin repo). Anchored to the repo root so they don't
+# match the skills/learn and skills/lab plugin folders.
+/learn/
+/lab/
+/learnlog.md
+/.local/

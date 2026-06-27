@@ -1,0 +1,21 @@
+{
+  "name": "learning-loop",
+  "description": "An iterative, top-down study loop (topic -> learn -> quiz -> lab -> repeat) for GitHub Copilot CLI, plus code-understanding and LPP-lint utilities. Resumable via learnlog.md.",
+  "version": "1.0.0",
+  "author": {
+    "name": "asyrovprog"
+  },
+  "license": "MIT",
+  "keywords": [
+    "learning",
+    "study",
+    "quiz",
+    "lab",
+    "education",
+    "lpp"
+  ],
+  "agents": "agents/",
+  "skills": [
+    "skills/"
+  ]
+}
